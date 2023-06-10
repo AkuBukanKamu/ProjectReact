@@ -15,14 +15,17 @@ class CreateGurusTable extends Migration
     {
         Schema::create('gurus', function (Blueprint $table) {
             $table->id();
-            $table->enum('unit', ['kenongo','magersari','surodinawan']);
+            $table->unsignedBigInteger('id_user');
+            $table->enum('unit', ['Kenongo','Magersari','Surodinawan']);
             $table->string('nama');
-            $table->string('tempatlahir');
-            $table->date('tanggallahir');
+            $table->string('tempat_lahir');
+            $table->date('tanggal_lahir');
             $table->bigInteger('no_hp');
             $table->bigInteger('gaji')->nullable();
-            $table->date('tanggalmasuk');
+            $table->date('tanggal_masuk');
             $table->timestamps();
+
+            $table->foreign('id_user')->references('id')->on('users');
         });
     }
 

@@ -26,6 +26,16 @@ class UserSeeder extends Seeder
             'level'     => 'user',
         ]);
 
+        DB::table('gurus')->insert([
+            'id_user' => '2',
+            'nama' => 'Budi',
+            'unit' => 'Kenongo',
+            'tempat_lahir' => 'Mojokerto',
+            'tanggal_lahir' => '1995-12-11 10:59:52',
+            'no_hp' => '085159159159',
+            'gaji' => '4500000',
+            'tanggal_masuk' => '2022-10-21 15:39:12'
+        ]);
 
     }
 }

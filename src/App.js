@@ -4,9 +4,9 @@ import { Switch, Route } from 'react-router-dom';
 import Dashboard from './Dashboard';
 import Login from './login';
 
-import ListUser from './Components/User/ListUser';
-import CreateUser from './Components/User/CreateUser';
-import EditUser from './Components/User/EditUser';
+import ListUser from './User/ListUser';
+import CreateUser from './User/CreateUser';
+import EditUser from './User/EditUser';
 
 import DataGuru from './Guru/DataGuru';
 import CreateGuru from './Guru/CreateGuru';
@@ -22,7 +22,7 @@ function App() {
       <Route exact path="/" component={Login} />
       <Route exact path="/dashboard" component={Dashboard} />
 
-      <Route exact path="/listuser" component={ListUser} />
+      <Route exact path="/users" component={ListUser} />
       <Route exact path="/user/create" component={CreateUser} />
       <Route exact path="/user/edit/:id" component={EditUser} />
       

@@ -19,16 +19,24 @@ use App\Http\Controllers\UserController;
 Route::post('/login', App\Http\Controllers\Api\LoginController::class)->name('login');
 Route::post('/logout', App\Http\Controllers\Api\LogoutController::class)->name('logout');
 
-Route::middleware('auth:api')->get('/users', function (Request $request) {
-    return $request->user();
+// Route::middleware('auth:api')->get('/users', function (Request $request) {
+//     return $request->user();
+// });
+
+
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('/users', [UserController::class, 'index']);
+    Route::post('/user', [UserController::class, 'store']);
+    Route::put('/user/{id}', [UserController::class, 'update']);
+    Route::delete('/user/{id}', [UserController::class, 'destroy']);
 });
 
 // Data User
-Route::get('/users', [UserController::class, 'index']);
-Route::post('/users/store', [UserController::class, 'store']);
-Route::get('/users/show/{id}', [UserController::class, 'show']);
-Route::patch('/users/update/{id}', [UserController::class, 'update']);
-Route::delete('/users/destroy/{id}', [UserController::class, 'destroy']);
+// Route::get('/users', [UserController::class, 'index']);
+// Route::post('/users/store', [UserController::class, 'store']);
+// Route::get('/users/show/{id}', [UserController::class, 'show']);
+// Route::patch('/users/update/{id}', [UserController::class, 'update']);
+// Route::delete('/users/destroy/{id}', [UserController::class, 'destroy']);
 
 // Data Guru
 Route::get('/guru', [GuruController::class, 'index']);

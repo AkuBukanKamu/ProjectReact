@@ -4,25 +4,24 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
     public function index()
     {
-        return User::select('id','name','email','level')->get();
+        return User::select('id', 'name', 'email', 'level')->get();
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'name'     =>'required',
-            'email'    =>'required',
-            'password' =>'required',
-            'level'    =>'required'
+            'name'     => 'required',
+            'email'    => 'required',
+            'password' => 'required',
+            'level'    => 'required'
         ]);
 
-        try{
+        try {
 
             $user = User::create([
                 'name'      => $request->name,
@@ -32,13 +31,13 @@ class UserController extends Controller
             ]);
 
             return response()->json([
-                'message'=>'User Created Successfully!!'
+                'message' => 'User Created Successfully!!', 'data' => $user, 'isSuccess' => true
             ]);
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json([
-                'message'=>'Something goes wrong while creating a user!!'
-            ],500);
+                'message' => 'Something goes wrong while creating a user!!'
+            ], 500);
         }
     }
 
@@ -47,22 +46,22 @@ class UserController extends Controller
         $user = User::findOrFail($id);
 
         return response()->json([
-            'datauser'=>$user
+            'datauser' => $user
         ]);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'name'     =>'required',
-            'email'    =>'required',
-            'password' =>'required',
-            'level'    =>'required'
+            'name'     => 'required',
+            'email'    => 'required',
+            'password' => 'required',
+            'level'    => 'required'
         ]);
 
         $user = User::findOrFail($id);
 
-        try{
+        try {
 
             $user->update([
                 'name'     => $request->name,
@@ -72,14 +71,13 @@ class UserController extends Controller
             ]);
 
             return response()->json([
-                'message'=>'User Updated Successfully!!'
+                'message' => 'User Updated Successfully!!'
             ]);
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json([
-                'message'=>'Something goes wrong while updating a user!!'
-            ],500);
+                'message' => $e
+            ], 500);
         }
     }
 
@@ -92,13 +90,12 @@ class UserController extends Controller
             $user->delete();
 
             return response()->json([
-                'message'=>'User Deleted Successfully!!'
+                'message' => 'User Deleted Successfully!!'
             ]);
-
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json([
-                'message'=>'Something goes wrong while deleting a user!!'
+                'message' => 'Something goes wrong while deleting a user!!'
             ]);
         }
     }

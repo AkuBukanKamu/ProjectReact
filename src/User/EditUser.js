@@ -1,52 +1,71 @@
-import React, { useState } from "react";
-import axios from 'axios'
+import React, { useEffect, useState } from "react";
+import Form from 'react-bootstrap/Form'
+import { useParams } from 'react-router-dom'
+import axios from 'axios';
+import Swal from 'sweetalert2';
 import { useHistory } from 'react-router';
 import { Link } from 'react-router-dom';
-import Swal from 'sweetalert2';
-import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
-import Nav from "../Nav";
-import Sidebar from "../Sidebar";
+import Sidebar from "../Components/Sidebar";
+import Nav from "../Components/Nav";
 
-function CreateUser() {
+function EditUser() {
 
     const history = useHistory();
-  
+
+    const { id } = useParams()
+    
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
     const [level, setLevel] = useState("")
     const [validationError,setValidationError] = useState({})
 
-    const createUser = async (e) => {
-        e.preventDefault();
-  
-        const formData = new FormData()
-  
-        formData.append('name', name)
-        formData.append('email', email)
-        formData.append('password', password)
-        formData.append('level', level)
-  
-        await axios.post(`http://127.0.0.1:8000/api/users/store`, formData).then(({data})=>{
-          Swal.fire({
-              icon:"success",
-              text:data.message
-          })
-          
-          history.push('/listuser');
-          
-        }).catch(({response})=>{
-          if(response.status===422){
-            setValidationError(response.data.errors)
-          }else{
-            Swal.fire({
-              text:response.data.message,
-              icon:"error"
-            })
-          }
+    useEffect(()=>{
+      fetchDataUser()
+    },[])
+
+    const fetchDataUser = async () => {
+      await axios.get(`http://127.0.0.1:8000/api/datauser/show/${id}`).then(({data})=>{
+        const { name, email, level } = data.datauser
+          setName(name)
+          setEmail(email)
+          setLevel(level)
+      }).catch(({response:{data}})=>{
+        Swal.fire({
+          text:data.message,
+          icon:"error"
         })
+      })
+    }
+
+    const updateUser = async (e) => {
+      e.preventDefault();
+
+      const formData = new FormData()
+      formData.append('_method', 'PATCH');
+      formData.append('name', name)
+      formData.append('email', email)
+      formData.append('password', password)
+      formData.append('level', level)
+
+      await axios.post(`http://127.0.0.1:8000/api/users/update/${id}`, formData).then(({data})=>{
+        Swal.fire({
+          icon:"success",
+          text:data.message
+        })
+        history.push('/users');
+      }).catch(({response})=>{
+        if(response.status===422){
+          setValidationError(response.data.errors)
+        }else{
+          Swal.fire({
+            text:response.data.message,
+            icon:"error"
+          })
+        }
+      })
     }
 
     return (
@@ -59,7 +78,7 @@ function CreateUser() {
 
                 <div class="content-wrapper">
                     <div class="container-xxl flex-grow-1 container-p-y">
-                        <h4 class="fw-bold py-3 mb-4">Create Data User</h4>
+                        <h4 class="fw-bold py-3 mb-4">Edit Data User</h4>
                         <div class="row">
                             <div class="col-xl">
                                 <div class="card mb-12">
@@ -80,7 +99,7 @@ function CreateUser() {
                                             </div>
                                         )
                                     }
-                                    <Form onSubmit={createUser}>
+                                    <Form onSubmit={updateUser}>
                                     <div class="card-body">
                                         <div class="mb-3">
                                             <Form.Label>Nama Lengkap</Form.Label>
@@ -108,7 +127,7 @@ function CreateUser() {
                                     </div>
                                     <div class="card-footer">
                                         <Button className="btn btn-primary" type="submit"><i className="bx bx-save"></i> Save Changes</Button> &nbsp;&nbsp;
-                                        <Link className="btn btn-danger" to={"/listuser"}><i className="bx bx-undo"></i> Cancel</Link>
+                                        <Link className="btn btn-danger" to={"/users"}><i className="bx bx-undo"></i> Cancel</Link>
                                     </div>
                                     </Form>
                                 </div>
@@ -125,4 +144,4 @@ function CreateUser() {
 
 }
 
-export default CreateUser;
+export default EditUser;
