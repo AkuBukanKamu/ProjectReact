@@ -30,6 +30,10 @@ function Sidebar() {
   const logoutHandler = async () => {
     localStorage.removeItem("token");
     localStorage.removeItem("role");
+    Swal.fire({
+      icon: "success",
+      text: "Berhasil Logout",
+    });
     history.push("/");
   };
 
