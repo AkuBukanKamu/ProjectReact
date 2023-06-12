@@ -10,17 +10,13 @@ import { useForm } from "react-hook-form";
 import TextField from "../Components/FormInput/TextField";
 import SelectForm from "../Components/FormInput/SelectForm";
 
-const levelOptions = [
-  { value: "admin", label: "Admin" },
-  { value: "user", label: "User" },
-];
 const unitOptions = [
   { value: "Magersari", label: "Magersari" },
   { value: "Kenongo", label: "Kenongo" },
   { value: "Surodinawan", label: "Surodinawan" },
 ];
 
-function CreateUser() {
+function CreateGuru() {
   const history = useHistory();
   const {
     control,
@@ -32,6 +28,7 @@ function CreateUser() {
   const level = watch("level");
 
   const onSubmit = async (data) => {
+    data.level = "user";
     await apiUser
       .store(data)
       .then(({ data }) => {
@@ -40,7 +37,7 @@ function CreateUser() {
           text: data.message,
         });
 
-        history.push("/users");
+        history.push("/guru");
       })
       .catch(({ response }) => {
         if (response.status === 422) {
@@ -58,7 +55,7 @@ function CreateUser() {
     <Layout>
       <div class="content-wrapper">
         <div class="container-xxl flex-grow-1 container-p-y">
-          <h4 class="fw-bold py-3 mb-4">Create Data User</h4>
+          <h4 class="fw-bold py-3 mb-4">Membuat Akun Guru</h4>
           <div class="row">
             <div class="col-xl">
               <div class="card mb-12">
@@ -79,6 +76,7 @@ function CreateUser() {
                 )}
                 <Form onSubmit={handleSubmit(onSubmit)}>
                   <div class="card-body">
+                    <div>Lengkapi Data Guru</div>
                     <div class="mb-3">
                       <TextField
                         name="name"
@@ -110,83 +108,68 @@ function CreateUser() {
                         type="password"
                       />
                     </div>
-
-                    <div class="">
+                    <div class="mb-3">
                       <SelectForm
-                        name="level"
-                        label="Level"
+                        name="unit"
+                        label="Unit"
                         control={control}
-                        options={levelOptions}
-                        required
+                        options={unitOptions}
+                        required={level === "user"}
+                      />
+                    </div>
+
+                    <div class="mb-3">
+                      <TextField
+                        name="tempat_lahir"
+                        label="Tempat Lahir"
+                        placeholder="Masukkan Tempat Lahir"
+                        control={control}
+                        required={level === "user"}
+                      />
+                    </div>
+
+                    <div class="mb-3">
+                      <TextField
+                        name="tanggal_lahir"
+                        label="Tanggal Lahir"
+                        placeholder="Masukkan Tanggal Lahir"
+                        control={control}
+                        required={level === "user"}
+                        type="date"
+                      />
+                    </div>
+
+                    <div class="mb-3">
+                      <TextField
+                        name="no_hp"
+                        label="No Handphone"
+                        placeholder="Masukkan No HP"
+                        control={control}
+                        required={level === "user"}
+                      />
+                    </div>
+
+                    <div class="mb-3">
+                      <TextField
+                        name="gaji"
+                        label="Gaji"
+                        placeholder="Masukkan Gaji"
+                        control={control}
+                        required={level === "user"}
+                        prefix="Rp."
+                      />
+                    </div>
+
+                    <div class="mb-3">
+                      <TextField
+                        name="tanggal_masuk"
+                        label="Tanggal Masuk"
+                        control={control}
+                        required={level === "user"}
+                        type="date"
                       />
                     </div>
                   </div>
-                  {level === "user" && (
-                    <div class="card-body">
-                      <div>Lengkapi Data Guru</div>
-                      <div class="mb-3">
-                        <SelectForm
-                          name="unit"
-                          label="Unit"
-                          control={control}
-                          options={unitOptions}
-                          required={level === "user"}
-                        />
-                      </div>
-
-                      <div class="mb-3">
-                        <TextField
-                          name="tempat_lahir"
-                          label="Tempat Lahir"
-                          placeholder="Masukkan Tempat Lahir"
-                          control={control}
-                          required={level === "user"}
-                        />
-                      </div>
-
-                      <div class="mb-3">
-                        <TextField
-                          name="tanggal_lahir"
-                          label="Tanggal Lahir"
-                          placeholder="Masukkan Tanggal Lahir"
-                          control={control}
-                          required={level === "user"}
-                          type="date"
-                        />
-                      </div>
-
-                      <div class="mb-3">
-                        <TextField
-                          name="no_hp"
-                          label="No Handphone"
-                          placeholder="Masukkan No HP"
-                          control={control}
-                          required={level === "user"}
-                        />
-                      </div>
-
-                      <div class="mb-3">
-                        <TextField
-                          name="gaji"
-                          label="Gaji"
-                          placeholder="Masukkan Gaji"
-                          control={control}
-                          required={level === "user"}
-                          prefix="Rp."
-                        />
-                      </div>
-
-                      <div class="mb-3">
-                        <TextField
-                          name="tanggal_masuk"
-                          label="Tanggal Masuk"
-                          control={control}
-                          required={level === "user"}
-                          type="date"
-                        />
-                      </div>
-                    </div>
-                  )}
 
                   <div class="card-footer">
                     <Button className="btn btn-primary" type="submit">
@@ -209,4 +192,4 @@ function CreateUser() {
   );
 }
 
-export default CreateUser;
+export default CreateGuru;

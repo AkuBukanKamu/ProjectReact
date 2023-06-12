@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Guru;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -18,7 +19,7 @@ class UserController extends Controller
             'name'     => 'required',
             'email'    => 'required',
             'password' => 'required',
-            'level'    => 'required'
+            'level'    => 'required',
         ]);
 
         try {
@@ -29,6 +30,20 @@ class UserController extends Controller
                 'password'  => bcrypt($request->password),
                 'level'     => $request->level,
             ]);
+            
+            if ($request->level === "user") {
+                $guru = new Guru;
+                $guru->id_user = $user->id;
+                $guru->unit          = $request->unit;
+                $guru->nama          = $request->name;
+                $guru->tempat_lahir   = $request->tempat_lahir;
+                $guru->tanggal_lahir  = $request->tanggal_lahir;
+                $guru->no_hp         = $request->no_hp;
+                $guru->gaji          = $request->gaji;
+                $guru->tanggal_masuk  = $request->tanggal_masuk;
+                $guru->save();
+            }
+
 
             return response()->json([
                 'message' => 'User Created Successfully!!', 'data' => $user, 'isSuccess' => true
@@ -36,7 +51,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json([
-                'message' => 'Something goes wrong while creating a user!!'
+                $e
             ], 500);
         }
     }

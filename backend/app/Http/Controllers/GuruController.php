@@ -3,94 +3,60 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guru;
+use App\Models\User;
 use Illuminate\Http\Request;
 
-class GuruController extends Controller
+class GuruController extends BaseController
 {
     public function index()
     {
-        return Guru::select('id','unit','nama','tempatlahir','tanggallahir', 'no_hp', 'gaji','tanggalmasuk')->get();
+        return Guru::all();
     }
 
-    public function store(Request $request)
+    public function show($id)
     {
-        $request->validate([
-            'unit'          =>'required',
-            'nama'          =>'required',
-            'tempatlahir'   =>'required',
-            'tanggallahir'  =>'required',
-            'no_hp'         =>'required',
-            'gaji'          =>'required',
-            'tanggalmasuk'  =>'required'
-        ]);
-
-
-        try{
-            $guru = Guru::create([
-                'unit'          => $request->unit,
-                'nama'          => $request->nama,
-                'tempatlahir'   => $request->tempatlahir,
-                'tanggallahir'  => $request->tanggallahir,
-                'no_hp'         => $request->no_hp,
-                'gaji'          => $request->gaji,
-                'tanggalmasuk'  => $request->tanggalmasuk
-            ]);
-
-            return response()->json([
-                'message'=>'Guru Created Successfully!!'
-            ]);
-        }catch(\Exception $e){
-            \Log::error($e->getMessage());
-            return response()->json([
-                'message'=>'Something goes wrong!!'
-            ],500);
+        try {
+            $teacher = Guru::findOrFail($id);
+            return $this->sendResponse($teacher, "data retrieved successfully");
+        } catch (\Throwable $th) {
+            return $this->sendError("error retrieving data", $th->getMessage());
         }
-        }
-
-    public function show(Guru $id)
-    {
-        $guru = Guru::findOrFail($id);
-
-        return response()->json([
-            'guru'=>$guru
-        ]);
     }
 
     public function update(Request $request, $id)
     {
         $request->validate([
-            'unit'          =>'required',
-            'nama'          =>'required',
-            'tempatlahir'   =>'required',
-            'tanggallahir'  =>'required',
-            'no_hp'         =>'required',
-            'gaji'          =>'required',
-            'tanggalmasuk'  =>'required'
+            'unit'          => 'required',
+            'nama'          => 'required',
+            'tempat_lahir'   => 'required',
+            'tanggal_lahir'  => 'required',
+            'no_hp'         => 'required',
+            'gaji'          => 'required',
+            'tanggal_masuk'  => 'required'
         ]);
 
         $guru = Guru::findOrFail($id);
 
-        try{
+        try {
 
             $guru->update([
                 'unit'          => $request->unit,
                 'nama'          => $request->nama,
-                'tempatlahir'   => $request->tempatlahir,
-                'tanggallahir'  => $request->tanggallahir,
+                'tempat_lahir'   => $request->tempat_lahir,
+                'tanggal_lahir'  => $request->tanggal_lahir,
                 'no_hp'         => $request->no_hp,
                 'gaji'          => $request->gaji,
-                'tanggalmasuk'  => $request->tanggalmasuk
+                'tanggal_masuk'  => $request->tanggal_masuk
             ]);
 
             return response()->json([
-                'message'=>'Guru Updated Successfully!!'
+                'message' => 'Guru Updated Successfully!!'
             ]);
-
-        }catch(\Exception $e){
+        } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json([
-                'message'=>'Something goes wrong!!'
-            ],500);
+                'message' => 'Something goes wrong!!'
+            ], 500);
         }
     }
 
@@ -99,22 +65,18 @@ class GuruController extends Controller
         try {
 
             $guru = Guru::findOrFail($id);
+            $user = User::findOrFail($guru->id_user);
             $guru->delete();
+            $user->delete();
 
             return response()->json([
-                'message'=>'Deleted Successfully!!'
+                'message' => 'Deleted Successfully!!'
             ]);
-
         } catch (\Exception $e) {
             \Log::error($e->getMessage());
             return response()->json([
-                'message'=>'Something goes wrong!!'
+                $e
             ]);
         }
     }
-
-
-
-
-    }
-
+}
