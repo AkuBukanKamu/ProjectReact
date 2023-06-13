@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guru;
+use App\Models\Murid;
 use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 
 class GuruController extends BaseController
@@ -11,6 +13,20 @@ class GuruController extends BaseController
     public function index()
     {
         return Guru::all();
+    }
+
+    public function dashboard()
+    {
+        try {
+            $user = Auth::user();
+            $teacher = Guru::where("id_user", $user->id)->first();
+            $user->info = $teacher;
+            $student = Murid::where("id_guru", $teacher->id)->get();
+            $user->students = $student;
+            return $this->sendResponse($user, "data retrieved successfully");
+        } catch (\Throwable $th) {
+            return $this->sendError("error retrieving data", $th->getMessage());
+        }
     }
 
     public function teachersByUnit($name)

@@ -61,11 +61,11 @@ function Sidebar() {
           </Link>
         </li>
 
-        <li class="menu-header small text-uppercase">
-          <span class="menu-header-text">Menu</span>
-        </li>
         {role === "admin" && (
           <>
+            <li class="menu-header small text-uppercase">
+              <span class="menu-header-text">Menu</span>
+            </li>
             <li class="menu-item">
               <Link to={"/users"} class="menu-link">
                 <i class="menu-icon tf-icons bx bx-user-circle"></i>
@@ -90,19 +90,20 @@ function Sidebar() {
         )}
 
         <li class="menu-item">
-          <Link to={"/#"} class="menu-link">
+          <Link to={"/spp"} class="menu-link">
             <i class="menu-icon tf-icons bx bx-briefcase"></i>
             <div data-i18n="Analytics">Pembayaran SPP</div>
           </Link>
         </li>
 
-        <li class="menu-item">
-          <Link to={"/#"} class="menu-link">
-            <i class="menu-icon tf-icons bx bx-briefcase"></i>
-            <div data-i18n="Analytics">Pemasukan Dan Pengeluaran</div>
-          </Link>
-        </li>
-
+        {role === "admin" && (
+          <li class="menu-item">
+            <Link to={"/#"} class="menu-link">
+              <i class="menu-icon tf-icons bx bx-briefcase"></i>
+              <div data-i18n="Analytics">Pemasukan Dan Pengeluaran</div>
+            </Link>
+          </li>
+        )}
         <li class="menu-item">
           <Link onClick={logoutHandler} class="menu-link">
             <i class="menu-icon tf-icons bx bx-log-in-circle"></i>

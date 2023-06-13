@@ -44,3 +44,7 @@ Route::middleware(['auth:api','userAccess:admin'])->group(function () {
     Route::put('/student/{id}', [MuridController::class, 'update']);
     Route::delete('/student/{id}', [MuridController::class, 'destroy']);
 });
+
+Route::middleware(['auth:api','userAccess:user'])->group(function () {
+    Route::get('/dashboard', [GuruController::class, 'dashboard']);
+});
