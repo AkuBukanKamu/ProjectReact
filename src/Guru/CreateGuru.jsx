@@ -114,7 +114,7 @@ function CreateGuru() {
                         label="Unit"
                         control={control}
                         options={unitOptions}
-                        required={level === "user"}
+                        required
                       />
                     </div>
 
@@ -124,7 +124,7 @@ function CreateGuru() {
                         label="Tempat Lahir"
                         placeholder="Masukkan Tempat Lahir"
                         control={control}
-                        required={level === "user"}
+                        required
                       />
                     </div>
 
@@ -134,7 +134,7 @@ function CreateGuru() {
                         label="Tanggal Lahir"
                         placeholder="Masukkan Tanggal Lahir"
                         control={control}
-                        required={level === "user"}
+                        required
                         type="date"
                       />
                     </div>
@@ -145,7 +145,7 @@ function CreateGuru() {
                         label="No Handphone"
                         placeholder="Masukkan No HP"
                         control={control}
-                        required={level === "user"}
+                        required
                       />
                     </div>
 
@@ -155,7 +155,7 @@ function CreateGuru() {
                         label="Gaji"
                         placeholder="Masukkan Gaji"
                         control={control}
-                        required={level === "user"}
+                        required
                         prefix="Rp."
                       />
                     </div>
@@ -165,7 +165,7 @@ function CreateGuru() {
                         name="tanggal_masuk"
                         label="Tanggal Masuk"
                         control={control}
-                        required={level === "user"}
+                        required
                         type="date"
                       />
                     </div>

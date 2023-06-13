@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GuruController;
+use App\Http\Controllers\MuridController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -32,28 +33,14 @@ Route::middleware(['auth:api','userAccess:admin'])->group(function () {
     Route::delete('/user/{id}', [UserController::class, 'destroy']);
 
     Route::get('/teachers', [GuruController::class, 'index']);
+    Route::get('/teachers/unit/{name}', [GuruController::class, 'teachersByUnit']);
     Route::get('/teacher/{id}', [GuruController::class, 'show']);
     Route::put('/teacher/{id}', [GuruController::class, 'update']);
     Route::delete('/teacher/{id}', [GuruController::class, 'destroy']);
+
+    Route::get('/students', [MuridController::class, 'index']);
+    Route::get('/student/{id}', [MuridController::class, 'show']);
+    Route::post('/student', [MuridController::class, 'store']);
+    Route::put('/student/{id}', [MuridController::class, 'update']);
+    Route::delete('/student/{id}', [MuridController::class, 'destroy']);
 });
-
-// Data User
-// Route::get('/users', [UserController::class, 'index']);
-// Route::post('/users/store', [UserController::class, 'store']);
-// Route::get('/users/show/{id}', [UserController::class, 'show']);
-// Route::patch('/users/update/{id}', [UserController::class, 'update']);
-// Route::delete('/users/destroy/{id}', [UserController::class, 'destroy']);
-
-// Data Guru
-Route::get('/guru', [GuruController::class, 'index']);
-Route::post('/guru/store', [GuruController::class, 'store']);
-Route::get('/guru/show/{id}', [GuruController::class, 'show']);
-Route::patch('/guru/update/{id}', [GuruController::class, 'update']);
-Route::delete('/guru/destroy/{id}', [GuruController::class, 'destroy']);
-
-// Data Murid
-Route::get('/murid', [MuridController::class, 'index']);
-Route::post('/murid/store', [MuridController::class, 'store']);
-Route::get('/murid/show/{id}', [MuridController::class, 'show']);
-Route::patch('/murid/update/{id}', [MuridController::class, 'update']);
-Route::delete('/murid/destroy/{id}', [MuridController::class, 'destroy']);

@@ -10,15 +10,19 @@ class CreateMuridsTable extends Migration
     {
         Schema::create('murids', function (Blueprint $table) {
             $table->id();
-            $table->enum('unit', ['kenongo','magersari','surodinawan']);
+            $table->enum('unit', ['Kenongo', 'Magersari', 'Surodinawan']);
+            $table->unsignedBigInteger('id_guru');
             $table->string('nama');
-            $table->string('namaguru');
+            $table->string('tempat_lahir');
+            $table->date('tanggal_lahir');
             $table->integer('umur');
-            $table->string('nohp');
+            $table->string('no_hp');
             $table->text('alamat');
-            $table->string('tglmasuk');
             $table->bigInteger('spp');
+            $table->string('tanggal_masuk');
             $table->timestamps();
+
+            $table->foreign('id_guru')->references('id')->on('gurus');
         });
     }
 

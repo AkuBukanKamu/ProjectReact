@@ -20,8 +20,8 @@ class UserSeeder extends Seeder
         ]);
 
         DB::table('users')->insert([
-            'name'      => 'user',
-            'email'     => 'user@gmail.com',
+            'name'      => 'budi',
+            'email'     => 'budi@gmail.com',
             'password'  => Hash::make('user'),
             'level'     => 'user',
         ]);
@@ -35,6 +35,19 @@ class UserSeeder extends Seeder
             'no_hp' => '085159159159',
             'gaji' => '4500000',
             'tanggal_masuk' => '2022-10-21 15:39:12'
+        ]);
+
+        DB::table('murids')->insert([
+            'id_guru' => '1',
+            'nama' => 'Ipin',
+            'unit' => 'Kenongo',
+            'tempat_lahir' => 'Mojokerto',
+            'tanggal_lahir' => '1995-12-11 10:59:52',
+            'umur' => '6',
+            'no_hp' => '085159159159',
+            'spp' => '4500000',
+            'tanggal_masuk' => '2022-10-21 15:39:12',
+            'alamat' => 'Jl. Gedangan'
         ]);
 
     }

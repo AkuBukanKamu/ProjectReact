@@ -1,17 +1,19 @@
-import React, { useEffect, useMemo, useState } from "react";
-import Form from "react-bootstrap/Form";
-import { useParams } from "react-router-dom";
-import Swal from "sweetalert2";
-import { useHistory } from "react-router";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, useHistory } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import axios from "axios";
+import Swal from "sweetalert2";
+import Form from "react-bootstrap/Form";
+import InputGroup from "react-bootstrap/InputGroup";
 
 import Nav from "../Components/Nav";
 import Sidebar from "../Components/Sidebar";
+import Footer from "../Components/footer";
+import { useForm } from "react-hook-form";
 import TextField from "../Components/FormInput/TextField";
 import SelectForm from "../Components/FormInput/SelectForm";
-import { useForm } from "react-hook-form";
 import { apiTeacher } from "../lib/api/admin/teacher";
+import apiStudent from "../lib/api/admin/student";
 
 const unitOptions = [
   { value: "Magersari", label: "Magersari" },
@@ -19,45 +21,47 @@ const unitOptions = [
   { value: "Surodinawan", label: "Surodinawan" },
 ];
 
-function EditGuru() {
+function CreateMurid() {
   const history = useHistory();
-
-  const { id } = useParams();
-  const [initialBody, setInitialBody] = useState();
+  const [teachersOptions, setTeachersOptions] = useState([]);
   const {
     control,
+    watch,
     handleSubmit,
-    reset,
     formState: { errors },
-  } = useForm({
-    defaultValues: useMemo(() => {
-      return initialBody;
-    }, [initialBody]),
-  });
-
+  } = useForm();
+  const unit = watch("unit");
   const [validationError, setValidationError] = useState({});
 
   useEffect(() => {
-    const getData = async () => {
-      await apiTeacher.view(id).then(({ data }) => {
-        console.log(data)
-        setInitialBody(data.data);
-        reset(data.data);
+    const getOptions = async () => {
+      await apiTeacher.listTeacherByUnit(unit).then((res) => {
+        const data = res.data.data;
+        const options = data.map((value) => {
+          return {
+            value: value.id,
+            label: value.nama,
+          };
+        });
+        setTeachersOptions(options)
+        console.log(options);
       });
     };
-    getData();
-  }, []);
+
+    getOptions();
+  }, [unit]);
 
   const onSubmit = async (data) => {
-    await apiTeacher
-      .update(id, data)
+    data.level = "user";
+    await apiStudent
+      .store(data)
       .then(({ data }) => {
         Swal.fire({
           icon: "success",
           text: data.message,
         });
 
-        history.push("/guru");
+        history.push("/murid");
       })
       .catch(({ response }) => {
         if (response.status === 422) {
@@ -70,7 +74,7 @@ function EditGuru() {
         }
       });
   };
-  
+
   return (
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
@@ -81,7 +85,7 @@ function EditGuru() {
 
           <div class="content-wrapper">
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4">Edit Data Guru</h4>
+              <h4 class="fw-bold py-3 mb-4">Create Data Murid</h4>
               <div class="row">
                 <div class="col-xl">
                   <div class="card mb-12">
@@ -102,7 +106,7 @@ function EditGuru() {
                     )}
                     <Form onSubmit={handleSubmit(onSubmit)}>
                       <div class="card-body">
-                        <div>Lengkapi Data Guru</div>
+                        <div>Lengkapi Data Murid</div>
                         <div class="mb-3">
                           <TextField
                             name="nama"
@@ -113,11 +117,30 @@ function EditGuru() {
                           />
                         </div>
                         <div class="mb-3">
+                          <TextField
+                            name="umur"
+                            label="Umur"
+                            placeholder="Masukkan Umur"
+                            control={control}
+                            required
+                          />
+                        </div>
+
+                        <div class="mb-3">
                           <SelectForm
                             name="unit"
                             label="Unit"
                             control={control}
                             options={unitOptions}
+                            required
+                          />
+                        </div>
+                        <div class="mb-3">
+                          <SelectForm
+                            name="id_guru"
+                            label="Guru"
+                            control={control}
+                            options={teachersOptions}
                             required
                           />
                         </div>
@@ -149,15 +172,27 @@ function EditGuru() {
                             label="No Handphone"
                             placeholder="Masukkan No HP"
                             control={control}
+                            required
                           />
                         </div>
 
                         <div class="mb-3">
                           <TextField
-                            name="gaji"
-                            label="Gaji"
-                            placeholder="Masukkan Gaji"
+                            name="alamat"
+                            label="Alamat"
+                            placeholder="Masukkan Alamat"
                             control={control}
+                            required
+                          />
+                        </div>
+
+                        <div class="mb-3">
+                          <TextField
+                            name="spp"
+                            label="SPP"
+                            placeholder="Masukkan SPP"
+                            control={control}
+                            required
                             prefix="Rp."
                           />
                         </div>
@@ -167,19 +202,20 @@ function EditGuru() {
                             name="tanggal_masuk"
                             label="Tanggal Masuk"
                             control={control}
+                            required
                             type="date"
                           />
                         </div>
+                      </div>
 
-                        <div class="card-footer">
-                          <Button className="btn btn-primary" type="submit">
-                            <i className="bx bx-save"></i> Save Changes
-                          </Button>{" "}
-                          &nbsp;&nbsp;
-                          <Link className="btn btn-danger" to={"/users"}>
-                            <i className="bx bx-undo"></i> Cancel
-                          </Link>
-                        </div>
+                      <div class="card-footer">
+                        <Button className="btn btn-primary" type="submit">
+                          <i className="bx bx-save"></i> Save Changes
+                        </Button>{" "}
+                        &nbsp;&nbsp;
+                        <Link className="btn btn-danger" to={"/users"}>
+                          <i className="bx bx-undo"></i> Cancel
+                        </Link>
                       </div>
                     </Form>
                   </div>
@@ -195,4 +231,4 @@ function EditGuru() {
   );
 }
 
-export default EditGuru;
+export default CreateMurid;

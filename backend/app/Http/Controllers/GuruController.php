@@ -13,6 +13,16 @@ class GuruController extends BaseController
         return Guru::all();
     }
 
+    public function teachersByUnit($name)
+    {
+        try {
+            $teacher = Guru::where("unit", $name)->get();
+            return $this->sendResponse($teacher, "data retrieved successfully");
+        } catch (\Throwable $th) {
+            return $this->sendError("error retrieving data", $th->getMessage());
+        }
+    }
+
     public function show($id)
     {
         try {
