@@ -7,9 +7,9 @@ import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
-import Sidebar from "../Components/Sidebar";
-import Nav from "../Components/Nav";
-import apiUser from "../lib/api/admin/user";
+import Sidebar from "../../../Components/Sidebar";
+import Nav from "../../../Components/Nav";
+import apiUser from "../../../lib/api/admin/user";
 
 function EditUser() {
   const history = useHistory();

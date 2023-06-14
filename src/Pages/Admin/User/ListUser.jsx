@@ -3,9 +3,9 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Swal from "sweetalert2";
 
-import Sidebar from "../Components/Sidebar";
-import Nav from "../Components/Nav";
-import apiUser from "../lib/api/admin/user";
+import Sidebar from "../../../Components/Sidebar";
+import Nav from "../../../Components/Nav";
+import apiUser from "../../../lib/api/admin/user";
 
 function ListUser() {
   const [data, setData] = useState([]);

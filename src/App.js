@@ -1,20 +1,21 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React from "react";
+import { Switch, Route } from "react-router-dom";
 
-import Dashboard from './Dashboard';
-import Login from './login';
+import Dashboard from "./Pages/User/Dashboard";
+import Login from "./login";
 
-import ListUser from './User/ListUser';
-import CreateUser from './User/CreateUser';
-import EditUser from './User/EditUser';
+import ListUser from "./Pages/Admin/User/ListUser";
+import CreateUser from "./Pages/Admin/User/CreateUser";
+import EditUser from "./Pages/Admin/User/EditUser";
 
-import DataGuru from './Guru/DataGuru';
-import CreateGuru from './Guru/CreateGuru';
-import EditGuru from './Guru/EditGuru';
+import DataGuru from "./Pages/Admin/Guru/DataGuru";
+import CreateGuru from "./Pages/Admin/Guru/CreateGuru";
+import EditGuru from "./Pages/Admin/Guru/EditGuru";
 
-import DataMurid from './Murid/DataMurid';
-import CreateMurid from './Murid/CreateMurid';
-import EditMurid from './Murid/EditMurid'
+import DataMurid from "./Pages/Admin/Murid/DataMurid";
+import CreateMurid from "./Pages/Admin/Murid/CreateMurid";
+import EditMurid from "./Pages/Admin/Murid/EditMurid";
+import DaftarUlang from "./Pages/User/DaftarUlang";
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function App() {
       <Route exact path="/users" component={ListUser} />
       <Route exact path="/user/create" component={CreateUser} />
       <Route exact path="/user/edit/:id" component={EditUser} />
-      
+
       <Route exact path="/guru" component={DataGuru} />
       <Route exact path="/guru/create" component={CreateGuru} />
       <Route exact path="/guru/edit/:id" component={EditGuru} />
@@ -34,9 +35,9 @@ function App() {
       <Route exact path="/murid/create" component={CreateMurid} />
       <Route exact path="/murid/edit/:id" component={EditMurid} />
 
+      <Route exact path="/daftar-ulang" component={DaftarUlang} />
     </Switch>
   );
-
 }
 
 export default App;

@@ -89,12 +89,22 @@ function Sidebar() {
           </>
         )}
 
-        <li class="menu-item">
-          <Link to={"/spp"} class="menu-link">
-            <i class="menu-icon tf-icons bx bx-briefcase"></i>
-            <div data-i18n="Analytics">Pembayaran SPP</div>
-          </Link>
-        </li>
+        {role === "user" && (
+          <>
+            <li class="menu-item">
+              <Link to={"/daftar-ulang"} class="menu-link">
+                <i class="menu-icon tf-icons bx bx-briefcase"></i>
+                <div data-i18n="Analytics">Daftar Ulang</div>
+              </Link>
+            </li>
+            <li class="menu-item">
+              <Link to={"/spp"} class="menu-link">
+                <i class="menu-icon tf-icons bx bx-briefcase"></i>
+                <div data-i18n="Analytics">Pembayaran SPP</div>
+              </Link>
+            </li>
+          </>
+        )}
 
         {role === "admin" && (
           <li class="menu-item">

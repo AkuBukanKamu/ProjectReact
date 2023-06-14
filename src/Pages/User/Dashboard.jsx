@@ -1,12 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import axios from "axios";
-
-import Nav from "./Components/Nav";
-import Sidebar from "./Components/Sidebar";
-import SidebarUser from "./Components/Sidebar";
-import Layout from "./Components/Layout";
-import { apiTeacher } from "./lib/api/admin/teacher";
+import Layout from "../../Components/Layout";
+import { apiTeacher } from "../../lib/api/admin/teacher";
 
 function Dashboard() {
   const [data, setData] = useState();
@@ -25,6 +19,7 @@ function Dashboard() {
       setGreeting("Selamat Malam");
     }
   }, []);
+  
   useEffect(() => {
     const getData = async () => {
       const res = await apiTeacher.dashboard();

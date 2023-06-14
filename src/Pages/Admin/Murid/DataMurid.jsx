@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
 import Swal from "sweetalert2";
 
-import Nav from "../Components/Nav";
-import Sidebar from "../Components/Sidebar";
-import { apiTeacher } from "../lib/api/admin/teacher";
+import Nav from "../../../Components/Nav";
+import Sidebar from "../../../Components/Sidebar";
+import Footer from "../../../Components/footer";
+import apiStudent from "../../../lib/api/admin/student";
 
-function DataGuru() {
+function DataMurid() {
   const [data, setData] = useState();
-  const [reloadData, setReloadData] = useState(false)
+  const [reloadData, setReloadData] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
-      await apiTeacher.index().then(({ data }) => setData(data));
+      await apiStudent.index().then(({ data }) => setData(data));
     };
 
     getData();
   }, [reloadData]);
 
-  const deleteGuru = async (id) => {
+  const deleteMurid = async (id) => {
     const isConfirm = await Swal.fire({
       title: "Are you sure?",
       text: "You wont be able to revert this",
@@ -36,14 +36,14 @@ function DataGuru() {
     if (!isConfirm) {
       return;
     }
-    await apiTeacher
+    await apiStudent
       .deleted(id)
       .then(({ data }) => {
         Swal.fire({
           icon: "success",
           text: data.message,
         });
-        setReloadData(!reloadData)
+        setReloadData(!reloadData);
       })
       .catch(({ Response: { data } }) => {
         Swal.fire({
@@ -63,12 +63,12 @@ function DataGuru() {
 
           <div class="content-wrapper">
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4">Data Guru</h4>
+              <h4 class="fw-bold py-3 mb-4">Data Murid</h4>
               <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                  <h5 class="mb-0">Data Guru</h5>
+                  <h5 class="mb-0">Data Murid</h5>
                   <Link
-                    to={"/guru/create"}
+                    to={"/murid/create"}
                     class="btn btn-sm btn-primary float-end"
                   >
                     <i class="bx bx-plus"></i> Tambah Data
@@ -82,10 +82,11 @@ function DataGuru() {
                           <th>No</th>
                           <th>Unit</th>
                           <th>Nama</th>
-                          <th>Tempat Lahir</th>
-                          <th>Tanggal Lahir</th>
-                          <th>No HP</th>
-                          <th>Gaji</th>
+                          <th>Nama Guru</th>
+                          <th>Umur</th>
+                          <th>No Hp</th>
+                          <th>Alamat</th>
+                          <th>SPP</th>
                           <th>Tanggal Masuk</th>
                           <th>Action</th>
                         </tr>
@@ -96,21 +97,22 @@ function DataGuru() {
                             <td>{key + 1}</td>
                             <td>{row.unit}</td>
                             <td>{row.nama}</td>
-                            <td>{row.tempat_lahir}</td>
-                            <td>{row.tanggal_lahir}</td>
+                            <td>{row.nama_guru}</td>
+                            <td>{row.umur}</td>
                             <td>{row.no_hp}</td>
-                            <td>{row.gaji}</td>
-                            <td>{row.tanggal_masuk}</td>
+                            <td>{row.alamat}</td>
+                            <td>{row.spp}</td>
+                            <td>{row.tanggal_masuk?.split(" ")[0]}</td>
                             <td>
                               <Link
-                                to={`/guru/edit/${row.id}`}
+                                to={`/murid/edit/${row.id}`}
                                 className="btn btn-sm btn-primary"
                               >
                                 <i class="bx bx-edit"></i> Edit
                               </Link>{" "}
                               &nbsp;
                               <Button
-                                onClick={() => deleteGuru(row.id)}
+                                onClick={() => deleteMurid(row.id)}
                                 style={{
                                   backgroundColor: "red",
                                   borderColor: "red",
@@ -137,4 +139,4 @@ function DataGuru() {
   );
 }
 
-export default DataGuru;
+export default DataMurid;

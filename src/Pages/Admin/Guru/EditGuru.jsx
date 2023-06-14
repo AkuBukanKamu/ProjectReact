@@ -6,24 +6,23 @@ import { useHistory } from "react-router";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 
-import Nav from "../Components/Nav";
-import Sidebar from "../Components/Sidebar";
-import apiStudent from "../lib/api/admin/student";
+import Nav from "../../../Components/Nav";
+import Sidebar from "../../../Components/Sidebar";
+import TextField from "../../../Components/FormInput/TextField";
+import SelectForm from "../../../Components/FormInput/SelectForm";
 import { useForm } from "react-hook-form";
-import TextField from "../Components/FormInput/TextField";
-import SelectForm from "../Components/FormInput/SelectForm";
+import { apiTeacher } from "../../../lib/api/admin/teacher";
 
 const unitOptions = [
-    { value: "Magersari", label: "Magersari" },
-    { value: "Kenongo", label: "Kenongo" },
-    { value: "Surodinawan", label: "Surodinawan" },
-  ];
+  { value: "Magersari", label: "Magersari" },
+  { value: "Kenongo", label: "Kenongo" },
+  { value: "Surodinawan", label: "Surodinawan" },
+];
 
-function EditMurid() {
+function EditGuru() {
   const history = useHistory();
 
   const { id } = useParams();
-  const [validationError, setValidationError] = useState({});
   const [initialBody, setInitialBody] = useState();
   const {
     control,
@@ -36,28 +35,29 @@ function EditMurid() {
     }, [initialBody]),
   });
 
+  const [validationError, setValidationError] = useState({});
+
   useEffect(() => {
     const getData = async () => {
-      await apiStudent.view(id).then(({ data }) => {
-        console.log(data);
-        setInitialBody(data.murid);
-        reset(data.murid);
+      await apiTeacher.view(id).then(({ data }) => {
+        console.log(data)
+        setInitialBody(data.data);
+        reset(data.data);
       });
     };
     getData();
-  }, [])
+  }, []);
 
-
- const onSubmit = async (data) => {
-    await apiStudent
-      .update(id,data)
+  const onSubmit = async (data) => {
+    await apiTeacher
+      .update(id, data)
       .then(({ data }) => {
         Swal.fire({
           icon: "success",
           text: data.message,
         });
 
-        history.push("/murid");
+        history.push("/guru");
       })
       .catch(({ response }) => {
         if (response.status === 422) {
@@ -70,7 +70,7 @@ function EditMurid() {
         }
       });
   };
-
+  
   return (
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
@@ -81,7 +81,7 @@ function EditMurid() {
 
           <div class="content-wrapper">
             <div class="container-xxl flex-grow-1 container-p-y">
-              <h4 class="fw-bold py-3 mb-4">Edit Data Murid</h4>
+              <h4 class="fw-bold py-3 mb-4">Edit Data Guru</h4>
               <div class="row">
                 <div class="col-xl">
                   <div class="card mb-12">
@@ -102,7 +102,7 @@ function EditMurid() {
                     )}
                     <Form onSubmit={handleSubmit(onSubmit)}>
                       <div class="card-body">
-                        <div>Lengkapi Data Murid</div>
+                        <div>Lengkapi Data Guru</div>
                         <div class="mb-3">
                           <TextField
                             name="nama"
@@ -113,16 +113,6 @@ function EditMurid() {
                           />
                         </div>
                         <div class="mb-3">
-                          <TextField
-                            name="umur"
-                            label="Umur"
-                            placeholder="Masukkan Umur"
-                            control={control}
-                            required
-                          />
-                        </div>
-
-                        <div class="mb-3">
                           <SelectForm
                             name="unit"
                             label="Unit"
@@ -130,15 +120,6 @@ function EditMurid() {
                             options={unitOptions}
                             required
                           />
-                        </div>
-                        <div class="mb-3">
-                          {/* <SelectForm
-                            name="id_guru"
-                            label="Guru"
-                            control={control}
-                            options={teachersOptions}
-                            required
-                          /> */}
                         </div>
 
                         <div class="mb-3">
@@ -168,27 +149,15 @@ function EditMurid() {
                             label="No Handphone"
                             placeholder="Masukkan No HP"
                             control={control}
-                            required
                           />
                         </div>
 
                         <div class="mb-3">
                           <TextField
-                            name="alamat"
-                            label="Alamat"
-                            placeholder="Masukkan Alamat"
+                            name="gaji"
+                            label="Gaji"
+                            placeholder="Masukkan Gaji"
                             control={control}
-                            required
-                          />
-                        </div>
-
-                        <div class="mb-3">
-                          <TextField
-                            name="spp"
-                            label="SPP"
-                            placeholder="Masukkan SPP"
-                            control={control}
-                            required
                             prefix="Rp."
                           />
                         </div>
@@ -198,20 +167,19 @@ function EditMurid() {
                             name="tanggal_masuk"
                             label="Tanggal Masuk"
                             control={control}
-                            required
                             type="date"
                           />
                         </div>
-                      </div>
 
-                      <div class="card-footer">
-                        <Button className="btn btn-primary" type="submit">
-                          <i className="bx bx-save"></i> Save Changes
-                        </Button>{" "}
-                        &nbsp;&nbsp;
-                        <Link className="btn btn-danger" to={"/users"}>
-                          <i className="bx bx-undo"></i> Cancel
-                        </Link>
+                        <div class="card-footer">
+                          <Button className="btn btn-primary" type="submit">
+                            <i className="bx bx-save"></i> Save Changes
+                          </Button>{" "}
+                          &nbsp;&nbsp;
+                          <Link className="btn btn-danger" to={"/users"}>
+                            <i className="bx bx-undo"></i> Cancel
+                          </Link>
+                        </div>
                       </div>
                     </Form>
                   </div>
@@ -227,4 +195,4 @@ function EditMurid() {
   );
 }
 
-export default EditMurid;
+export default EditGuru;

@@ -6,14 +6,14 @@ import Swal from "sweetalert2";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 
-import Nav from "../Components/Nav";
-import Sidebar from "../Components/Sidebar";
-import Footer from "../Components/footer";
+import Nav from "../../../Components/Nav";
+import Sidebar from "../../../Components/Sidebar";
+import Footer from "../../../Components/footer";
 import { useForm } from "react-hook-form";
-import TextField from "../Components/FormInput/TextField";
-import SelectForm from "../Components/FormInput/SelectForm";
-import { apiTeacher } from "../lib/api/admin/teacher";
-import apiStudent from "../lib/api/admin/student";
+import TextField from "../../../Components/FormInput/TextField";
+import SelectForm from "../../../Components/FormInput/SelectForm";
+import { apiTeacher } from "../../../lib/api/admin/teacher";
+import apiStudent from "../../../lib/api/admin/student";
 
 const unitOptions = [
   { value: "Magersari", label: "Magersari" },

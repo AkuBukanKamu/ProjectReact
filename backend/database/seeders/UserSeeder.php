@@ -50,5 +50,14 @@ class UserSeeder extends Seeder
             'alamat' => 'Jl. Gedangan'
         ]);
 
+        DB::table('spps')->insert([
+            'id_teacher' => '1',
+            'id_student' => '1',
+            'unit' => 'Kenongo',
+            'nominal' => '100000',
+            'created_at' => '2023-06-13 23:01:33
+            '
+        ]);
+
     }
 }

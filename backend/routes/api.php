@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\MuridController;
+use App\Http\Controllers\SppController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -47,4 +48,7 @@ Route::middleware(['auth:api','userAccess:admin'])->group(function () {
 
 Route::middleware(['auth:api','userAccess:user'])->group(function () {
     Route::get('/dashboard', [GuruController::class, 'dashboard']);
+
+    Route::get('/students/month', [SppController::class, 'students']);
+    Route::post('/payment', [SppController::class, 'create']);
 });
