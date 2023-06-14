@@ -98,7 +98,7 @@ function Sidebar() {
               </Link>
             </li>
             <li class="menu-item">
-              <Link to={"/spp"} class="menu-link">
+              <Link to={"/pembayaran-spp"} class="menu-link">
                 <i class="menu-icon tf-icons bx bx-briefcase"></i>
                 <div data-i18n="Analytics">Pembayaran SPP</div>
               </Link>
