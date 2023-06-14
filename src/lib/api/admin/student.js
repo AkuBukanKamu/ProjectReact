@@ -5,7 +5,8 @@ const view = (id) => instance.auth.get(`/student/${id}`);
 const store = (data) => instance.auth.post(`/student`, data);
 const update = (id, data) => instance.auth.put(`/student/${id}`, data);
 const deleted = (id) => instance.auth.delete(`/student/${id}`);
+const profile = (id) => instance.auth.get(`/profile/student/${id}`);
 
-const apiStudent = { index, view, store, update, deleted };
+const apiStudent = { index, view, store, update, deleted, profile };
 
-export default apiStudent
+export default apiStudent;

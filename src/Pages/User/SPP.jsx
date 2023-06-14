@@ -27,6 +27,8 @@ function SPP() {
     day: "2-digit",
     month: "2-digit",
     year: "numeric",
+  };
+  const optionsTime = {
     hour: "2-digit",
     minute: "2-digit",
     timeZone: "Asia/Jakarta",
@@ -34,7 +36,8 @@ function SPP() {
   };
   const currentMonth = monthNames[currentDate.getMonth()];
   const currentYear = currentDate.getFullYear();
-  const formattedDateTime = currentDate.toLocaleString("id-ID", options);
+  const formattedDate = currentDate.toLocaleString("id-ID", options);
+  const formattedTime = currentDate.toLocaleString("id-ID", optionsTime);
   const [selectedData, setSelectedData] = useState();
   const [validationError, setValidationError] = useState({});
   const [nominal, setNominal] = useState();
@@ -165,8 +168,12 @@ function SPP() {
                 </th>
               </tr>
               <tr>
+                <td>Tanggal Pembayaran</td>
+                <th>{formattedDate}</th>
+              </tr>
+              <tr>
                 <td>Waktu Pembayaran</td>
-                <th>{formattedDateTime}</th>
+                <th>{formattedTime}</th>
               </tr>
               <tr>
                 <td>Nominal</td>

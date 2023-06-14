@@ -50,6 +50,19 @@ class UserSeeder extends Seeder
             'alamat' => 'Jl. Gedangan'
         ]);
 
+        DB::table('murids')->insert([
+            'id_guru' => '1',
+            'nama' => 'Ehsan',
+            'unit' => 'Kenongo',
+            'tempat_lahir' => 'Sidoarjo',
+            'tanggal_lahir' => '1999-12-11 10:59:52',
+            'umur' => '6',
+            'no_hp' => '085159159159',
+            'spp' => '4500000',
+            'tanggal_masuk' => '2022-10-21 15:39:12',
+            'alamat' => 'Jl. Gedangan'
+        ]);
+
         DB::table('spps')->insert([
             'id_teacher' => '1',
             'id_student' => '1',

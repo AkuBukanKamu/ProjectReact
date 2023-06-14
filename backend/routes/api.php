@@ -51,4 +51,6 @@ Route::middleware(['auth:api','userAccess:user'])->group(function () {
 
     Route::get('/students/month', [SppController::class, 'students']);
     Route::post('/payment', [SppController::class, 'create']);
+    Route::get('/profile/teacher', [GuruController::class, 'profileTeacher']);
+    Route::get('/profile/student/{id}', [MuridController::class, 'show']);
 });

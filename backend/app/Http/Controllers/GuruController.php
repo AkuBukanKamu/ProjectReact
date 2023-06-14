@@ -49,6 +49,17 @@ class GuruController extends BaseController
         }
     }
 
+    public function profileTeacher()
+    {
+        try {
+            $user = Auth::user();
+            $teacher = Guru::where("id_user", $user->id)->first();
+            return $this->sendResponse($teacher, "data retrieved successfully");
+        } catch (\Throwable $th) {
+            return $this->sendError("error retrieving data", $th->getMessage());
+        }
+    }
+
     public function update(Request $request, $id)
     {
         $request->validate([

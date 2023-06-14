@@ -103,6 +103,12 @@ function Sidebar() {
                 <div data-i18n="Analytics">Pembayaran SPP</div>
               </Link>
             </li>
+            <li class="menu-item">
+              <Link to={"/profil"} class="menu-link">
+                <i class="menu-icon tf-icons bx bx-user"></i>
+                <div data-i18n="Analytics">Profil</div>
+              </Link>
+            </li>
           </>
         )}
 

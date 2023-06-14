@@ -65,7 +65,7 @@ class SppController extends BaseController
             $user = Auth::user();
             $teacher = Guru::where("id_user", $user->id)->first();
             $students = Spp::where("id_teacher", $teacher->id)->whereRaw('MONTH(spps.created_at) = ? AND YEAR(spps.created_at) = ?', [$currentMonth, $currentYear])
-                ->join("murids", "spps.id_student", "=", "murids.id")->select("spps.*", "murids.nama as nama_siswa", "murids.no_hp as no_hp")->get();
+                ->join("murids", "spps.id_student", "=", "murids.id")->select("spps.*", "murids.nama as nama_siswa", "murids.no_hp as no_hp", "murids.umur as umur")->get();
 
 
             return $this->sendResponse($students, "data retrieved successfully");

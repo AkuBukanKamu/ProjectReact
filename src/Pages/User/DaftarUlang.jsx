@@ -4,6 +4,8 @@ import { apiTeacher } from "../../lib/api/admin/teacher";
 import { Button, Modal, Dropdown, Form, Card, Col, Row } from "react-bootstrap";
 import Swal from "sweetalert2";
 import apiSpp from "../../lib/api/spp";
+import Avatar from "./Avatar";
+import { Link } from "react-router-dom";
 
 const monthNames = [
   "Januari",
@@ -89,9 +91,25 @@ function DaftarUlang() {
             {dataStudent?.map((card, index) => (
               <Col key={index} sm={12} md={6} lg={4}>
                 <Card className="mb-4">
-                  <Card.Body>
-                    <Card.Title className="font-bold">{card.nama_siswa}</Card.Title>
-                    <Card.Text>{card.no_hp}</Card.Text>
+                  <Card.Body
+                    style={{
+                      display: "flex",
+                      flexDirection: "column",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Avatar name={card.nama_siswa} />
+                    <Card.Title className="font-bold">
+                      {card.nama_siswa}
+                    </Card.Title>
+                    <div style={{marginBottom: "4px"}}> {card.no_hp}</div>
+                    <Link
+                      to={`/siswa/${card.id_student}`}
+                      className="btn btn-sm btn-primary"
+                      style={{ width: "100%" }}
+                    >
+                      <i class="bx bx-view"></i> Lihat
+                    </Link>{" "}
                   </Card.Body>
                 </Card>
               </Col>
