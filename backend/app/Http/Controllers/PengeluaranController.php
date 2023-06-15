@@ -32,16 +32,6 @@ class PengeluaranController extends BaseController
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -62,28 +52,6 @@ class PengeluaranController extends BaseController
         } catch (\Throwable $th) {
             return $this->sendError("error retrieving data", $th->getMessage());
         }
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
     }
 
     /**
@@ -122,14 +90,9 @@ class PengeluaranController extends BaseController
             $expense = Pengeluaran::findOrFail($id);
             $expense->delete();
 
-            return response()->json([
-                'message' => 'Deleted Successfully!!'
-            ]);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
-            return response()->json([
-                $e
-            ]);
+            return $this->sendResponse($expense, "data retrieved successfully");
+        } catch (\Throwable $th) {
+            return $this->sendError("error retrieving data", $th->getMessage());
         }
     }
 }

@@ -5,11 +5,10 @@ import axios from "axios";
 import Swal from "sweetalert2";
 
 import Layout from "../../Components/Layout";
-import { apiTeacher } from "../../lib/api/admin/teacher";
 import apiSpp from "../../lib/api/spp";
 import { Form, Modal, Table } from "react-bootstrap";
 
-function PengeluaranGuru() {
+function Pengeluaran() {
   const [data, setData] = useState([]);
   const [teacher, setTeacher] = useState();
   const [reloadData, setReloadData] = useState(false);
@@ -176,15 +175,18 @@ function PengeluaranGuru() {
                         hour: "2-digit",
                         minute: "2-digit",
                       });
+                      const formattedNumber = new Intl.NumberFormat("id-ID", {
+                        style: "currency",
+                        currency: "IDR",
+                      }).format(row.nominal);
                       return (
                         <tr key={key}>
                           <td>{key + 1}</td>
                           <td>{formattedDate}</td>
-                          {role === "admin" &&
-                          <td>{row.unit}</td>}
+                          {role === "admin" && <td>{row.unit}</td>}
                           <td>{row.kategori}</td>
                           <td>{row.keterangan ?? "-"}</td>
-                          <td>{row.nominal}</td>
+                          <td>{formattedNumber}</td>
                           <td>
                             {" "}
                             <Button
@@ -196,6 +198,7 @@ function PengeluaranGuru() {
                                 setSelectedId(row.id);
                                 setShowAdd(true);
                               }}
+                              className="btn btn-sm"
                             >
                               <i className="bx bx-edit"></i> Edit
                             </Button>{" "}
@@ -335,4 +338,4 @@ function PengeluaranGuru() {
   );
 }
 
-export default PengeluaranGuru;
+export default Pengeluaran;

@@ -19,7 +19,8 @@ import DaftarUlang from "./Pages/User/DaftarUlang";
 import SPP from "./Pages/User/SPP";
 import Profil from "./Pages/User/Profil";
 import ProfilSiswa from "./Pages/User/ProfilSiswa";
-import PengeluaranGuru from "./Pages/User/PengeluaranGuru";
+import Pengeluaran from "./Pages/User/Pengeluaran";
+import Pemasukan from "./Pages/User/Pemasukan";
 
 function App() {
   return (
@@ -41,7 +42,8 @@ function App() {
 
       <Route exact path="/daftar-ulang" component={DaftarUlang} />
       <Route exact path="/pembayaran-spp" component={SPP} />
-      <Route exact path="/pengeluaran" component={PengeluaranGuru} />
+      <Route exact path="/pemasukan" component={Pemasukan} />
+      <Route exact path="/pengeluaran" component={Pengeluaran} />
       <Route exact path="/profil" component={Profil} />
       <Route exact path="/siswa/:id" component={ProfilSiswa} />
     </Switch>

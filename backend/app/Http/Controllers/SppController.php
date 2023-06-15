@@ -17,7 +17,16 @@ class SppController extends BaseController
      */
     public function index()
     {
-        //
+        try {
+            $data = Spp::where("nominal", "<>", "0")
+            ->join("murids", "spps.id_student", "=", "murids.id")
+            ->select("spps.*", "murids.nama as nama_siswa")
+            ->orderBy('created_at', 'desc')->get();
+
+            return $this->sendResponse($data, "data retrieved successfully");
+        } catch (\Throwable $th) {
+            return $this->sendError("error retrieving data", $th->getMessage());
+        }
     }
 
     /**
@@ -72,60 +81,5 @@ class SppController extends BaseController
         } catch (\Throwable $th) {
             return $this->sendError("error retrieving data", $th->getMessage());
         }
-    }
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 }

@@ -147,7 +147,7 @@ function Sidebar() {
         {role === "admin" && (
           <>
             <li class="menu-item">
-              <Link to={"/#"} class="menu-link">
+              <Link to={"/pemasukan"} class="menu-link">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
