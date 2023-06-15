@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout";
 import apiUser from "../../lib/api/admin/user";
 import { convertDate } from "../../lib/utils/dateFormatter";
+import { excelDownloader } from "../../lib/utils/excelDownloader";
+import { Button } from "react-bootstrap";
+import { rupiahFormatter } from "../../lib/utils/currencyFormatter";
 
 function Pemasukan() {
   const [data, setData] = useState();
@@ -15,6 +18,20 @@ function Pemasukan() {
     getData();
   }, []);
 
+  const handleDownload = () => {
+    const rows = data.map((v, i) => {
+      return {
+        No: i + 1,
+        Unit: v.unit,
+        Siswa: v.nama_siswa,
+        Nominal: v.nominal,
+        Tanggal: convertDate(v.created_at),
+      };
+    });
+    
+    excelDownloader(rows, "Pemasukan.xlsx");
+  };
+
   return (
     <Layout>
       <div class="content-wrapper">
@@ -22,7 +39,13 @@ function Pemasukan() {
           <h3 class="fw-bold ">Pemasukan</h3>
           <div class="card">
             <div class="card-body">
-              <div class="table-responsive text-nowrap">
+              <Button variant="success" onClick={handleDownload}>
+                Export
+              </Button>
+              <div
+                class="table-responsive text-nowrap"
+                style={{ marginTop: 12 }}
+              >
                 <table class="table table-bordered">
                   <thead>
                     <tr>
@@ -34,21 +57,15 @@ function Pemasukan() {
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.map((row, key) => {
-                      const formattedNumber = new Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                      }).format(row.nominal);
-                      return (
-                        <tr key={key}>
-                          <td>{key + 1}</td>
-                          <td>{row.unit}</td>
-                          <td>{row.nama_siswa}</td>
-                          <td>{formattedNumber}</td>
-                          <td>{convertDate(row.created_at)}</td>
-                        </tr>
-                      );
-                    })}
+                    {data?.map((row, key) => (
+                      <tr key={key}>
+                        <td>{key + 1}</td>
+                        <td>{row.unit}</td>
+                        <td>{row.nama_siswa}</td>
+                        <td>{rupiahFormatter(row.nominal)}</td>
+                        <td>{convertDate(row.created_at)}</td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

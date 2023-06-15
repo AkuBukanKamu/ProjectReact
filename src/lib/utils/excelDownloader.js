@@ -1,6 +1,6 @@
 import * as XLSX from "xlsx"
 
-export const excelDownloader = (data) => {
+export const excelDownloader = (data, fileName) => {
     // Convert the array of objects to a worksheet object
     const worksheet = XLSX.utils.json_to_sheet(data)
   
@@ -17,7 +17,7 @@ export const excelDownloader = (data) => {
     // Create a link element to download the Excel file
     const link = document.createElement("a")
     link.href = URL.createObjectURL(blob)
-    link.download = "data.xlsx"
+    link.download = fileName
     link.click()
   
     // Helper function to convert a string to an ArrayBuffer

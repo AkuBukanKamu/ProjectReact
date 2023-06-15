@@ -20,7 +20,6 @@ function CreateGuru() {
   const history = useHistory();
   const {
     control,
-    watch,
     handleSubmit,
     formState: { errors },
   } = useForm();

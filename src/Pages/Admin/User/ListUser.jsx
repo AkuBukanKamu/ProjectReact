@@ -66,10 +66,9 @@ function ListUser() {
               <h4 class="fw-bold py-3 mb-4">Data User</h4>
               <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                  <h5 class="mb-0">Data User</h5>
                   <Link
                     to={"/user/create"}
-                    class="btn btn-sm btn-primary float-end"
+                    class="btn btn-primary float-end"
                   >
                     <i class="bx bx-plus"></i> Tambah Data
                   </Link>

@@ -9,6 +9,7 @@ import Sidebar from "../../../Components/Sidebar";
 import { apiTeacher } from "../../../lib/api/admin/teacher";
 import { convertDate } from "../../../lib/utils/dateFormatter";
 import { rupiahFormatter } from "../../../lib/utils/currencyFormatter";
+import { excelDownloader } from "../../../lib/utils/excelDownloader";
 
 function DataGuru() {
   const [data, setData] = useState();
@@ -55,6 +56,23 @@ function DataGuru() {
       });
   };
 
+  const handleDownload = () => {
+    const rows = data.map((v, i) => {
+      return {
+        No: i + 1,
+        Unit: v.unit,
+        Nama: v.nama,
+        "Tempat Lahir": v.tempat_lahir,
+        "Tanggal Lahir": convertDate(v.tanggal_lahir),
+        "No HP": v.no_hp,
+        Gaji: rupiahFormatter(v.gaji),
+        "Tanggal Masuk": convertDate(v.tanggal_masuk),
+      };
+    });
+    
+    excelDownloader(rows, "Guru.xlsx");
+  };
+
   return (
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
@@ -68,13 +86,12 @@ function DataGuru() {
               <h4 class="fw-bold py-3 mb-4">Data Guru</h4>
               <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                  <h5 class="mb-0">Data Guru</h5>
-                  <Link
-                    to={"/guru/create"}
-                    class="btn btn-sm btn-primary float-end"
-                  >
+                  <Link to={"/guru/create"} class="btn btn-primary float-end">
                     <i class="bx bx-plus"></i> Tambah Data
                   </Link>
+                  <Button variant="success" onClick={handleDownload}>
+                    Export
+                  </Button>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive text-nowrap">

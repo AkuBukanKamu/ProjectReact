@@ -9,6 +9,7 @@ import Footer from "../../../Components/footer";
 import apiStudent from "../../../lib/api/admin/student";
 import { convertDate } from "../../../lib/utils/dateFormatter";
 import { rupiahFormatter } from "../../../lib/utils/currencyFormatter";
+import { excelDownloader } from "../../../lib/utils/excelDownloader";
 
 function DataMurid() {
   const [data, setData] = useState();
@@ -55,6 +56,24 @@ function DataMurid() {
       });
   };
 
+  const handleDownload = () => {
+    const rows = data.map((v, i) => {
+      return {
+        No: i + 1,
+        Unit: v.unit,
+        Nama: v.nama,
+        "Nama Guru": v.nama_guru,
+        Umur: v.umur,
+        Alamat: v.alamat,
+        "No HP": v.no_hp,
+        SPP: rupiahFormatter(v.spp),
+        "Tanggal Masuk": convertDate(v.tanggal_masuk),
+      };
+    });
+
+    excelDownloader(rows, "Siswa.xlsx");
+  };
+
   return (
     <div class="layout-wrapper layout-content-navbar">
       <div class="layout-container">
@@ -68,13 +87,12 @@ function DataMurid() {
               <h4 class="fw-bold py-3 mb-4">Data Murid</h4>
               <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                  <h5 class="mb-0">Data Murid</h5>
-                  <Link
-                    to={"/murid/create"}
-                    class="btn btn-sm btn-primary float-end"
-                  >
+                  <Link to={"/murid/create"} class="btn btn-primary float-end">
                     <i class="bx bx-plus"></i> Tambah Data
                   </Link>
+                  <Button variant="success" onClick={handleDownload}>
+                    Export
+                  </Button>
                 </div>
                 <div class="card-body">
                   <div class="table-responsive text-nowrap">

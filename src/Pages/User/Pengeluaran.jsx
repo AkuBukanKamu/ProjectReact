@@ -126,8 +126,8 @@ function Pengeluaran() {
         Tanggal: convertDate(v.created_at),
       };
     });
-    console.log(rows);
-    excelDownloader(rows);
+    
+    excelDownloader(rows, "Pengeluaran.xlsx");
   };
 
   return (
