@@ -3,23 +3,15 @@ import React, { useEffect, useState } from "react";
 import Layout from "../../Components/Layout";
 import apiSpp from "../../lib/api/spp";
 import { Table } from "react-bootstrap";
+import { convertDate } from "../../lib/utils/dateFormatter";
 
 function Profil() {
   const [data, setData] = useState();
-  const [tanggal_lahir, setTanggalLahir] = useState();
 
   useEffect(() => {
     const getData = async () => {
       await apiSpp.profileTeacher().then(({ data }) => {
         setData(data.data);
-        var parts = data.data.tanggal_lahir?.split("-"); // Split the original date by the hyphen (-)
-
-        var year = parts[0];
-        var month = parts[1];
-        var day = parts[2];
-
-        var formattedDate = day + "-" + month + "-" + year;
-        setTanggalLahir(formattedDate)
       });
     };
     getData();
@@ -51,7 +43,7 @@ function Profil() {
                       <tr>
                         <td>Tempat, Tanggal Lahir</td>
                         <th>
-                          {data?.tempat_lahir}, {tanggal_lahir}
+                          {data?.tempat_lahir}, {convertDate(data?.tanggal_lahir)}
                         </th>
                       </tr>
                       <tr>

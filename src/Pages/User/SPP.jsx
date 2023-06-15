@@ -3,6 +3,8 @@ import Layout from "../../Components/Layout";
 import apiSpp from "../../lib/api/spp";
 import { Button, Form, Modal, Table } from "react-bootstrap";
 import Swal from "sweetalert2";
+import { dateNow, timeNow } from "../../lib/utils/dateFormatter";
+import { rupiahFormatter } from "../../lib/utils/currencyFormatter";
 
 const monthNames = [
   "Januari",
@@ -23,21 +25,8 @@ function SPP() {
   const [data, setData] = useState();
   const [show, setShow] = useState(false);
   const currentDate = new Date();
-  const options = {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  };
-  const optionsTime = {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Asia/Jakarta",
-    timeZoneName: "short",
-  };
   const currentMonth = monthNames[currentDate.getMonth()];
   const currentYear = currentDate.getFullYear();
-  const formattedDate = currentDate.toLocaleString("id-ID", options);
-  const formattedTime = currentDate.toLocaleString("id-ID", optionsTime);
   const [selectedData, setSelectedData] = useState();
   const [validationError, setValidationError] = useState({});
   const [nominal, setNominal] = useState();
@@ -108,7 +97,7 @@ function SPP() {
                         <td>{row.nama_siswa}</td>
                         <td>{row.no_hp}</td>
                         <td>
-                          {row.nominal === 0 ? "Belum Bayar" : row.nominal}
+                          {row.nominal === 0 ? "Belum Bayar" : rupiahFormatter(row.nominal)}
                         </td>
                         <td>
                           {" "}
@@ -169,11 +158,11 @@ function SPP() {
               </tr>
               <tr>
                 <td>Tanggal Pembayaran</td>
-                <th>{formattedDate}</th>
+                <th>{dateNow()}</th>
               </tr>
               <tr>
                 <td>Waktu Pembayaran</td>
-                <th>{formattedTime}</th>
+                <th>{timeNow()}</th>
               </tr>
               <tr>
                 <td>Nominal</td>

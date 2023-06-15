@@ -7,10 +7,12 @@ import Swal from "sweetalert2";
 import Nav from "../../../Components/Nav";
 import Sidebar from "../../../Components/Sidebar";
 import { apiTeacher } from "../../../lib/api/admin/teacher";
+import { convertDate } from "../../../lib/utils/dateFormatter";
+import { rupiahFormatter } from "../../../lib/utils/currencyFormatter";
 
 function DataGuru() {
   const [data, setData] = useState();
-  const [reloadData, setReloadData] = useState(false)
+  const [reloadData, setReloadData] = useState(false);
 
   useEffect(() => {
     const getData = async () => {
@@ -43,7 +45,7 @@ function DataGuru() {
           icon: "success",
           text: data.message,
         });
-        setReloadData(!reloadData)
+        setReloadData(!reloadData);
       })
       .catch(({ Response: { data } }) => {
         Swal.fire({
@@ -97,10 +99,10 @@ function DataGuru() {
                             <td>{row.unit}</td>
                             <td>{row.nama}</td>
                             <td>{row.tempat_lahir}</td>
-                            <td>{row.tanggal_lahir}</td>
+                            <td>{convertDate(row.tanggal_lahir)}</td>
                             <td>{row.no_hp}</td>
-                            <td>{row.gaji}</td>
-                            <td>{row.tanggal_masuk}</td>
+                            <td>{rupiahFormatter(row.gaji)}</td>
+                            <td> {convertDate(row.tanggal_masuk)}</td>
                             <td>
                               <Link
                                 to={`/guru/edit/${row.id}`}

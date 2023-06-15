@@ -1,40 +1,18 @@
 import React, { useEffect, useState } from "react";
 import Layout from "../../Components/Layout";
-import TextField from "../../Components/FormInput/TextField";
-import SelectForm from "../../Components/FormInput/SelectForm";
-import apiSpp from "../../lib/api/spp";
 import { Table } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import apiStudent from "../../lib/api/admin/student";
+import { convertDate } from "../../lib/utils/dateFormatter";
 
 function ProfilSiswa() {
   const { id } = useParams();
   const [data, setData] = useState();
-  const [tanggal_lahir, setTanggalLahir] = useState();
-  const [tanggalMasuk, setTanggalMasuk] = useState();
 
   useEffect(() => {
     const getData = async () => {
       await apiStudent.profile(id).then(({ data }) => {
         setData(data.murid);
-        var parts = data.murid.tanggal_lahir?.split("-"); // Split the original date by the hyphen (-)
-
-        var year = parts[0];
-        var month = parts[1];
-        var day = parts[2];
-
-        var formattedDate = day + "-" + month + "-" + year;
-        setTanggalLahir(formattedDate);
-
-
-        var parts2 = data.murid.tanggal_masuk?.split("-"); // Split the original date by the hyphen (-)
-
-        var year2 = parts2[0];
-        var month2 = parts2[1];
-        var day2 = parts2[2].split(" ")[0];
-
-        var formattedDate2 = day2 + "-" + month2 + "-" + year2;
-        setTanggalMasuk(formattedDate2);
       });
     };
     getData();
@@ -70,7 +48,7 @@ function ProfilSiswa() {
                       <tr>
                         <td>Tempat, Tanggal Lahir</td>
                         <th>
-                          {data?.tempat_lahir}, {tanggal_lahir}
+                          {data?.tempat_lahir}, {convertDate(data?.tanggal_lahir)}
                         </th>
                       </tr>
                       <tr>
@@ -81,7 +59,7 @@ function ProfilSiswa() {
                       </tr>
                       <tr>
                         <td>TanggalMasuk</td>
-                        <th>{tanggalMasuk}</th>
+                        <th>{convertDate(data?.tanggal_masuk)}</th>
                       </tr>
                     </tbody>
                   </Table>

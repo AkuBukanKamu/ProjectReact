@@ -25,7 +25,6 @@ function CreateGuru() {
     formState: { errors },
   } = useForm();
   const [validationError, setValidationError] = useState({});
-  const level = watch("level");
 
   const onSubmit = async (data) => {
     data.level = "user";

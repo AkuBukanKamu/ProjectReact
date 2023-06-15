@@ -7,6 +7,8 @@ import Nav from "../../../Components/Nav";
 import Sidebar from "../../../Components/Sidebar";
 import Footer from "../../../Components/footer";
 import apiStudent from "../../../lib/api/admin/student";
+import { convertDate } from "../../../lib/utils/dateFormatter";
+import { rupiahFormatter } from "../../../lib/utils/currencyFormatter";
 
 function DataMurid() {
   const [data, setData] = useState();
@@ -101,8 +103,8 @@ function DataMurid() {
                             <td>{row.umur}</td>
                             <td>{row.no_hp}</td>
                             <td>{row.alamat}</td>
-                            <td>{row.spp}</td>
-                            <td>{row.tanggal_masuk?.split(" ")[0]}</td>
+                            <td>{rupiahFormatter(row.spp)}</td>
+                            <td>{convertDate(row.tanggal_masuk)}</td>
                             <td>
                               <Link
                                 to={`/murid/edit/${row.id}`}

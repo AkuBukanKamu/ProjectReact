@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../../Components/Layout";
 import { apiTeacher } from "../../lib/api/admin/teacher";
-import { Button, Modal, Dropdown, Form, Card, Col, Row } from "react-bootstrap";
+import { Button, Modal, Form, Card, Col, Row } from "react-bootstrap";
 import Swal from "sweetalert2";
 import apiSpp from "../../lib/api/spp";
 import Avatar from "./Avatar";

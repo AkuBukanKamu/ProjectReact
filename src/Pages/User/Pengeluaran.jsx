@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import axios from "axios";
 import Swal from "sweetalert2";
+import { excelDownloader } from "../../lib/utils/excelDownloader";
 
 import Layout from "../../Components/Layout";
 import apiSpp from "../../lib/api/spp";
 import { Form, Modal, Table } from "react-bootstrap";
+import { convertDate, dateNow, timeNow } from "../../lib/utils/dateFormatter";
+import { rupiahFormatter } from "../../lib/utils/currencyFormatter";
 
 function Pengeluaran() {
   const [data, setData] = useState([]);
@@ -20,20 +21,6 @@ function Pengeluaran() {
   const [selectedId, setSelectedId] = useState();
   const role = localStorage.getItem("role");
   const [unit, setUnit] = useState();
-  const currentDate = new Date();
-  const options = {
-    day: "2-digit",
-    month: "2-digit",
-    year: "numeric",
-  };
-  const optionsTime = {
-    hour: "2-digit",
-    minute: "2-digit",
-    timeZone: "Asia/Jakarta",
-    timeZoneName: "short",
-  };
-  const formattedDate = currentDate.toLocaleString("id-ID", options);
-  const formattedTime = currentDate.toLocaleString("id-ID", optionsTime);
 
   useEffect(() => {
     const getData = async () => {
@@ -129,6 +116,20 @@ function Pengeluaran() {
     }
   };
 
+  const handleDownload = () => {
+    const rows = data.map((v, i) => {
+      return {
+        No: i + 1,
+        Unit: v.unit,
+        Kategori: v.kategori,
+        Keterangan: v.keterangan,
+        Tanggal: convertDate(v.created_at),
+      };
+    });
+    console.log(rows);
+    excelDownloader(rows);
+  };
+
   return (
     <Layout>
       <div className="content-wrapper">
@@ -150,6 +151,9 @@ function Pengeluaran() {
               >
                 Tambah Pengeluaran
               </Button>
+              <Button variant="success" onClick={handleDownload}>
+                Export
+              </Button>
             </div>
             <div className="card-body">
               <div className="table-responsive text-nowrap">
@@ -166,57 +170,42 @@ function Pengeluaran() {
                     </tr>
                   </thead>
                   <tbody>
-                    {data?.map((row, key) => {
-                      const date = new Date(row.created_at);
-                      const formattedDate = date.toLocaleString("en-GB", {
-                        day: "2-digit",
-                        month: "2-digit",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      });
-                      const formattedNumber = new Intl.NumberFormat("id-ID", {
-                        style: "currency",
-                        currency: "IDR",
-                      }).format(row.nominal);
-                      return (
-                        <tr key={key}>
-                          <td>{key + 1}</td>
-                          <td>{formattedDate}</td>
-                          {role === "admin" && <td>{row.unit}</td>}
-                          <td>{row.kategori}</td>
-                          <td>{row.keterangan ?? "-"}</td>
-                          <td>{formattedNumber}</td>
-                          <td>
-                            {" "}
-                            <Button
-                              variant="primary"
-                              onClick={() => {
-                                setKategori(row.kategori);
-                                setNominal(row.nominal);
-                                setKeterangan(row.keterangan);
-                                setSelectedId(row.id);
-                                setShowAdd(true);
-                              }}
-                              className="btn btn-sm"
-                            >
-                              <i className="bx bx-edit"></i> Edit
-                            </Button>{" "}
-                            &nbsp;
-                            <Button
-                              onClick={() => deleteGuru(row.id)}
-                              style={{
-                                backgroundColor: "red",
-                                borderColor: "red",
-                              }}
-                              className="btn btn-sm"
-                            >
-                              <i className="bx bx-trash"></i> Hapus
-                            </Button>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                    {data?.map((row, key) => (
+                      <tr key={key}>
+                        <td>{key + 1}</td>
+                        <td>{convertDate(row.created_at)}</td>
+                        {role === "admin" && <td>{row.unit}</td>}
+                        <td>{row.kategori}</td>
+                        <td>{row.keterangan ?? "-"}</td>
+                        <td>{rupiahFormatter(row.nominal)}</td>
+                        <td>
+                          <Button
+                            variant="primary"
+                            onClick={() => {
+                              setKategori(row.kategori);
+                              setNominal(row.nominal);
+                              setKeterangan(row.keterangan);
+                              setSelectedId(row.id);
+                              setShowAdd(true);
+                            }}
+                            className="btn btn-sm"
+                          >
+                            <i className="bx bx-edit"></i> Edit
+                          </Button>{" "}
+                          &nbsp;
+                          <Button
+                            onClick={() => deleteGuru(row.id)}
+                            style={{
+                              backgroundColor: "red",
+                              borderColor: "red",
+                            }}
+                            className="btn btn-sm"
+                          >
+                            <i className="bx bx-trash"></i> Hapus
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>
@@ -252,11 +241,11 @@ function Pengeluaran() {
               )}
               <tr>
                 <td>Tanggal</td>
-                <th>{formattedDate}</th>
+                <th>{dateNow()}</th>
               </tr>
               <tr>
                 <td>Waktu</td>
-                <th>{formattedTime}</th>
+                <th>{timeNow()}</th>
               </tr>
               {role === "admin" && (
                 <tr>
