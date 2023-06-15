@@ -4,6 +4,7 @@ import { apiTeacher } from "../../lib/api/admin/teacher";
 import Chart from "react-apexcharts";
 import apiUser from "../../lib/api/admin/user";
 import { Card } from "react-bootstrap";
+import { useScreenSize } from "../../lib/utils/useScreenSize";
 
 function Dashboard() {
   const [data, setData] = useState();
@@ -13,6 +14,7 @@ function Dashboard() {
   const [expense, setExpense] = useState([]);
   const role = localStorage.getItem("role")
   const [unit, setUnit] = useState()
+  const {deviceType} = useScreenSize()
 
   useEffect(() => {
     const currentHour = new Date().getHours();

@@ -3,9 +3,11 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 import Swal from "sweetalert2";
 import apiUser from "../lib/api/admin/user";
+import { useScreenSize } from "../lib/utils/useScreenSize";
 
 function Sidebar() {
   const history = useHistory();
+  const { deviceType } = useScreenSize();
 
   const token = localStorage.getItem("token");
   const role = localStorage.getItem("role");
@@ -41,50 +43,70 @@ function Sidebar() {
   return (
     <aside
       id="layout-menu"
-      class="layout-menu menu-vertical menu bg-menu-theme"
+      className={`${
+        deviceType !== "tablet" && "menu-vertical"
+      } menu bg-menu-theme`}
     >
-      <div class="app-brand demo">
-        <Link to={"#"} class="app-brand-link">
-          <span class="app-brand-logo demo"></span>
-          <span class="app-brand-text demo menu-text fw-bolder ms-2">
-            AIUEO
-          </span>
-        </Link>
-      </div>
+      {deviceType !== "tablet" && (
+        <div className="app-brand demo">
+          <Link to={"#"} className="app-brand-link">
+            <span className="app-brand-logo demo"></span>
+            <span className="app-brand-text demo menu-text fw-bolder ms-2">
+              AIUEO
+            </span>
+          </Link>
+        </div>
+      )}
+      <div className="menu-inner-shadow"></div>
 
-      <div class="menu-inner-shadow"></div>
-
-      <ul class="menu-inner py-1">
-        <li class="menu-item">
-          <Link to={"/dashboard"} class="menu-link">
-            <i class="menu-icon tf-icons bx bx-home-circle"></i>
-            <div data-i18n="Analytics">Dashboard</div>
+      <ul className={`${deviceType !== "tablet" && "menu-inner"} py-1`} style={{display:"flex", flexDirection:"column", gap:deviceType === "tablet" ? 24 : 0, marginTop: 16, marginLeft: deviceType ==="tablet" ? -20 :0, marginRight: 4,}}>
+        <li className="menu-item">
+          <Link to={"/dashboard"} className="menu-link">
+            <i className="menu-icon tf-icons bx bx-home-circle"></i>
+            <div
+              data-i18n="Analytics"
+              style={{ display: deviceType === "tablet" ? "none" : "flex" }}
+            >
+              Dashboard
+            </div>
           </Link>
         </li>
 
         {role === "admin" && (
           <>
-            <li class="menu-header small text-uppercase">
-              <span class="menu-header-text">Menu</span>
-            </li>
-            <li class="menu-item">
-              <Link to={"/users"} class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user-circle"></i>
-                <div data-i18n="Analytics">Data User</div>
+            <li className="menu-item">
+              <Link to={"/users"} className="menu-link">
+                <i className="menu-icon tf-icons bx bx-user-circle"></i>
+                <div
+                  data-i18n="Analytics"
+                  style={{ display: deviceType === "tablet" ? "none" : "flex" }}
+                >
+                  Data User
+                </div>
               </Link>
             </li>
 
-            <li class="menu-item">
-              <Link to={"/murid"} class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Analytics">Data Murid</div>
+            <li className="menu-item">
+              <Link to={"/murid"} className="menu-link">
+                <i className="menu-icon tf-icons bx bx-user"></i>
+                <div
+                  data-i18n="Analytics"
+                  style={{ display: deviceType === "tablet" ? "none" : "flex" }}
+                >
+                  Data Murid
+                </div>
               </Link>
             </li>
 
-            <li class="menu-item">
-              <Link to={"/guru"} class="menu-link">
-                <i class="menu-icon tf-icons bx bx-briefcase"></i>
-                <div data-i18n="Analytics">Data Guru</div>
+            <li className="menu-item">
+              <Link to={"/guru"} className="menu-link">
+                <i className="menu-icon tf-icons bx bx-briefcase"></i>
+                <div
+                  data-i18n="Analytics"
+                  style={{ display: deviceType === "tablet" ? "none" : "flex" }}
+                >
+                  Data Guru
+                </div>
               </Link>
             </li>
           </>
@@ -92,20 +114,25 @@ function Sidebar() {
 
         {role === "user" && (
           <>
-            <li class="menu-item">
-              <Link to={"/daftar-ulang"} class="menu-link">
-                <i class="menu-icon tf-icons bx bx-briefcase"></i>
-                <div data-i18n="Analytics">Daftar Ulang</div>
+            <li className="menu-item">
+              <Link to={"/daftar-ulang"} className="menu-link">
+                <i className="menu-icon tf-icons bx bx-briefcase"></i>
+                <div
+                  data-i18n="Analytics"
+                  style={{ display: deviceType === "tablet" ? "none" : "flex" }}
+                >
+                  Daftar Ulang
+                </div>
               </Link>
             </li>
-            <li class="menu-item">
-              <Link to={"/pembayaran-spp"} class="menu-link">
+            <li className="menu-item">
+              <Link to={"/pembayaran-spp"} className="menu-link">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
                   fill="currentColor"
-                  class="menu-icon tf-icons bi bi-cash-coin"
+                  className="menu-icon tf-icons bi bi-cash-coin"
                   viewBox="0 0 16 16"
                 >
                   <path
@@ -116,29 +143,44 @@ function Sidebar() {
                   <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z" />
                   <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z" />
                 </svg>
-                <div data-i18n="Analytics">Pembayaran SPP</div>
+                <div
+                  data-i18n="Analytics"
+                  style={{ display: deviceType === "tablet" ? "none" : "flex" }}
+                >
+                  Pembayaran SPP
+                </div>
               </Link>
             </li>
 
-            <li class="menu-item">
-              <Link to={"/pengeluaran"} class="menu-link">
+            <li className="menu-item">
+              <Link to={"/pengeluaran"} className="menu-link">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
                   fill="currentColor"
-                  class="menu-icon tf-icons text-bold bi bi-cart"
+                  className="menu-icon tf-icons text-bold bi bi-cart"
                   viewBox="0 0 16 16"
                 >
                   <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                 </svg>
-                <div data-i18n="Analytics">Pengeluaran</div>
+                <div
+                  data-i18n="Analytics"
+                  style={{ display: deviceType === "tablet" ? "none" : "flex" }}
+                >
+                  Pengeluaran
+                </div>
               </Link>
             </li>
-            <li class="menu-item">
-              <Link to={"/profil"} class="menu-link">
-                <i class="menu-icon tf-icons bx bx-user"></i>
-                <div data-i18n="Analytics">Profil</div>
+            <li className="menu-item">
+              <Link to={"/profil"} className="menu-link">
+                <i className="menu-icon tf-icons bx bx-user"></i>
+                <div
+                  data-i18n="Analytics"
+                  style={{ display: deviceType === "tablet" ? "none" : "flex" }}
+                >
+                  Profil
+                </div>
               </Link>
             </li>
           </>
@@ -146,14 +188,14 @@ function Sidebar() {
 
         {role === "admin" && (
           <>
-            <li class="menu-item">
-              <Link to={"/pemasukan"} class="menu-link">
+            <li className="menu-item">
+              <Link to={"/pemasukan"} className="menu-link">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
                   fill="currentColor"
-                  class="menu-icon tf-icons bi bi-cash-coin"
+                  className="menu-icon tf-icons bi bi-cash-coin"
                   viewBox="0 0 16 16"
                 >
                   <path
@@ -164,31 +206,46 @@ function Sidebar() {
                   <path d="M1 0a1 1 0 0 0-1 1v8a1 1 0 0 0 1 1h4.083c.058-.344.145-.678.258-1H3a2 2 0 0 0-2-2V3a2 2 0 0 0 2-2h10a2 2 0 0 0 2 2v3.528c.38.34.717.728 1 1.154V1a1 1 0 0 0-1-1H1z" />
                   <path d="M9.998 5.083 10 5a2 2 0 1 0-3.132 1.65 5.982 5.982 0 0 1 3.13-1.567z" />
                 </svg>
-                <div data-i18n="Analytics">Pemasukan</div>
+                <div
+                  data-i18n="Analytics"
+                  style={{ display: deviceType === "tablet" ? "none" : "flex" }}
+                >
+                  Pemasukan
+                </div>
               </Link>
             </li>
-            <li class="menu-item">
-              <Link to={"/pengeluaran"} class="menu-link">
+            <li className="menu-item">
+              <Link to={"/pengeluaran"} className="menu-link">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
                   height="16"
                   fill="currentColor"
-                  class="menu-icon tf-icons text-bold bi bi-cart"
+                  className="menu-icon tf-icons text-bold bi bi-cart"
                   viewBox="0 0 16 16"
                 >
                   <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2zm7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2z" />
                 </svg>
-                <div data-i18n="Analytics">Pengeluaran</div>
+                <div
+                  data-i18n="Analytics"
+                  style={{ display: deviceType === "tablet" ? "none" : "flex" }}
+                >
+                  Pengeluaran
+                </div>
               </Link>
             </li>
           </>
         )}
 
-        <li class="menu-item">
-          <Link onClick={logoutHandler} class="menu-link">
-            <i class="menu-icon tf-icons bx bx-log-in-circle"></i>
-            <div data-i18n="Analytics">Logout</div>
+        <li className="menu-item">
+          <Link onClick={logoutHandler} className="menu-link">
+            <i className="menu-icon tf-icons bx bx-log-in-circle"></i>
+            <div
+              data-i18n="Analytics"
+              style={{ display: deviceType === "tablet" ? "none" : "flex" }}
+            >
+              Logout
+            </div>
           </Link>
         </li>
       </ul>
