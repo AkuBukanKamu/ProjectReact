@@ -11,7 +11,7 @@ class CreateMuridsTable extends Migration
         Schema::create('murids', function (Blueprint $table) {
             $table->id();
             $table->enum('unit', ['Kenongo', 'Magersari', 'Surodinawan']);
-            $table->unsignedBigInteger('id_guru');
+            $table->unsignedBigInteger('id_guru')->nullable();
             $table->string('nama');
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
@@ -22,7 +22,7 @@ class CreateMuridsTable extends Migration
             $table->string('tanggal_masuk');
             $table->timestamps();
 
-            $table->foreign('id_guru')->references('id')->on('gurus');
+            $table->foreign('id_guru')->references('id')->on('gurus')->onDelete('set null');
         });
     }
 

@@ -100,20 +100,14 @@ class GuruController extends BaseController
     public function destroy($id)
     {
         try {
-
             $guru = Guru::findOrFail($id);
             $user = User::findOrFail($guru->id_user);
             $guru->delete();
             $user->delete();
 
-            return response()->json([
-                'message' => 'Deleted Successfully!!'
-            ]);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
-            return response()->json([
-                $e
-            ]);
+            return $this->sendResponse($guru, "data retrieved successfully");
+        } catch (\Throwable $th) {
+            return $this->sendError("error retrieving data", $th->getMessage());
         }
     }
 }

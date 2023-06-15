@@ -112,14 +112,9 @@ class MuridController extends BaseController
             $student = Murid::findOrFail($id);
             $student->delete();
 
-            return response()->json([
-                'message' => 'Deleted Successfully!!'
-            ]);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
-            return response()->json([
-                'message' => 'Something goes wrong!!'
-            ]);
+            return $this->sendResponse($student, "data retrieved successfully");
+        } catch (\Throwable $th) {
+            return $this->sendError("error retrieving data", $th->getMessage());
         }
     }
 }

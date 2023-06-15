@@ -169,16 +169,13 @@ class UserController extends BaseController
 
             // $user->delete();
             $user = User::findOrFail($id);
+            $teacher = Guru::where("id_user", $user->id)->first();
+            $teacher->delete();
             $user->delete();
 
-            return response()->json([
-                'message' => 'User Deleted Successfully!!'
-            ]);
-        } catch (\Exception $e) {
-            \Log::error($e->getMessage());
-            return response()->json([
-                'message' => 'Something goes wrong while deleting a user!!'
-            ]);
+            return $this->sendResponse($user, "data retrieved successfully");
+        } catch (\Throwable $th) {
+            return $this->sendError("error retrieving data", $th->getMessage());
         }
     }
 }

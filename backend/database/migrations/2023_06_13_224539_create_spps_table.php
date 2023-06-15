@@ -16,13 +16,13 @@ class CreateSppsTable extends Migration
         Schema::create('spps', function (Blueprint $table) {
             $table->id();
             $table->enum('unit', ['Kenongo','Magersari','Surodinawan']);
-            $table->unsignedBigInteger('id_teacher');
-            $table->unsignedBigInteger('id_student');
+            $table->unsignedBigInteger('id_teacher')->nullable();
+            $table->unsignedBigInteger('id_student')->nullable();
             $table->bigInteger('nominal');
             $table->timestamps();
 
-            $table->foreign('id_teacher')->references('id')->on('users');
-            $table->foreign('id_student')->references('id')->on('murids');
+            $table->foreign('id_teacher')->references('id')->on('users')->onDelete('set null');
+            $table->foreign('id_student')->references('id')->on('murids')->onDelete('set null');
         });
     }
 
