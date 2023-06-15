@@ -20,7 +20,7 @@ class CreateGurusTable extends Migration
             $table->string('nama');
             $table->string('tempat_lahir');
             $table->date('tanggal_lahir');
-            $table->bigInteger('no_hp');
+            $table->string('no_hp');
             $table->bigInteger('gaji')->nullable();
             $table->date('tanggal_masuk');
             $table->timestamps();

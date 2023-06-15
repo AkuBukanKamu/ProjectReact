@@ -6,9 +6,10 @@ const store = (data) => instance.auth.post(`/user`, data);
 const update = (id, data) => instance.auth.put(`/user/${id}`, data);
 const deleted = (id) => instance.auth.delete(`/user/${id}`);
 const user = (id) => instance.auth.get("/user");
+const chart = () => instance.auth.get(`/chart`);
 
 const income = () => instance.auth.get(`/income`);
 
-const apiUser = { index, view, store, update, deleted, user, income };
+const apiUser = { index, view, store, update, deleted, user, income, chart };
 
 export default apiUser;

@@ -51,7 +51,6 @@ Route::middleware(['auth:api','userAccess:admin'])->group(function () {
 
 Route::middleware(['auth:api','userAccess:user'])->group(function () {
     Route::get('/dashboard', [GuruController::class, 'dashboard']);
-
     Route::get('/students/month', [SppController::class, 'students']);
     Route::post('/payment', [SppController::class, 'create']);
     Route::get('/profile/teacher', [GuruController::class, 'profileTeacher']);
@@ -59,6 +58,7 @@ Route::middleware(['auth:api','userAccess:user'])->group(function () {
 });
 
 Route::middleware(['auth:api'])->group(function () {
+    Route::get('/chart', [UserController::class, 'chart']);
     Route::get('/user', [UserController::class, 'detail']);
     Route::get('/expense', [PengeluaranController::class, 'index']);
     Route::post('/expense', [PengeluaranController::class, 'store']);

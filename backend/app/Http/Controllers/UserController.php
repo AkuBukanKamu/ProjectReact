@@ -3,15 +3,73 @@
 namespace App\Http\Controllers;
 
 use App\Models\Guru;
+use App\Models\Murid;
+use App\Models\Pengeluaran;
+use App\Models\Spp;
 use App\Models\User;
 use Auth;
+use DB;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class UserController extends BaseController
 {
     public function index()
     {
         return User::select('id', 'name', 'email', 'level')->get();
+    }
+
+    public function chart()
+    {
+        try {
+            $teachers = [
+                'Kenongo' => Guru::where("unit", "Kenongo")->count(),
+                'Magersari' => Guru::where("unit", "Magersari")->count(),
+                'Surodinawan' => Guru::where("unit", "Surodinawan")->count(),
+            ];
+            $student = [
+                'Kenongo' => Murid::where("unit", "Kenongo")->count(),
+                'Magersari' => Murid::where("unit", "Magersari")->count(),
+                'Surodinawan' => Murid::where("unit", "Surodinawan")->count(),
+            ];
+            $user = Auth::user();
+            if ($user->level === "admin") {
+                $income = Spp::select(DB::raw('MONTHNAME(created_at) as month'), DB::raw('SUM(nominal) as nominal'))
+                    ->groupBy(DB::raw('MONTHNAME(created_at)'), DB::raw('YEAR(created_at)'))
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+
+                $expense = Pengeluaran::select(DB::raw('MONTHNAME(created_at) as month'), DB::raw('SUM(nominal) as nominal'))
+                    ->groupBy(DB::raw('MONTHNAME(created_at)'), DB::raw('YEAR(created_at)'))
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+            } else {
+                $teacher = Guru::where("id_user", $user->id)->first();
+                $income = Spp::where("unit", $teacher->unit)->select(DB::raw('MONTHNAME(created_at) as month'), DB::raw('SUM(nominal) as nominal'))
+                    ->groupBy(DB::raw('MONTHNAME(created_at)'), DB::raw('YEAR(created_at)'))
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+
+                $expense = Pengeluaran::where("unit", $teacher->unit)->select(DB::raw('MONTHNAME(created_at) as month'), DB::raw('SUM(nominal) as nominal'))
+                    ->groupBy(DB::raw('MONTHNAME(created_at)'), DB::raw('YEAR(created_at)'))
+                    ->orderBy('created_at', 'asc')
+                    ->get();
+            }
+
+
+            $data = [
+                'teacher' => $teachers,
+                'student' => $student,
+                'income' => $income,
+                'expense' => $expense
+            ];
+            // $teacher = Guru::where("id_user", $user->id)->first();
+            // $user->info = $teacher;
+            // $student = Murid::where("id_guru", $teacher->id)->get();
+            // $user->students = $student;
+            return $this->sendResponse($data, "data retrieved successfully");
+        } catch (\Throwable $th) {
+            return $this->sendError("error retrieving data", $th->getMessage());
+        }
     }
 
     public function store(Request $request)
@@ -31,7 +89,7 @@ class UserController extends Controller
                 'password'  => bcrypt($request->password),
                 'level'     => $request->level,
             ]);
-            
+
             if ($request->level === "user") {
                 $guru = new Guru;
                 $guru->id_user = $user->id;

@@ -2,16 +2,23 @@
 
 namespace Database\Seeders;
 
+use App\Models\Guru;
+use App\Models\Murid;
+use App\Models\Pengeluaran;
+use App\Models\Spp;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use Faker\Factory as Faker;
 
 class UserSeeder extends Seeder
 {
 
     public function run()
     {
+        $faker = Faker::create();
+
         DB::table('users')->insert([
             'name'      => 'admin',
             'email'     => 'admin@gmail.com',
@@ -19,71 +26,79 @@ class UserSeeder extends Seeder
             'level'     => 'admin',
         ]);
 
-        DB::table('users')->insert([
-            'name'      => 'budi',
-            'email'     => 'budi@gmail.com',
-            'password'  => Hash::make('user'),
-            'level'     => 'user',
-        ]);
+        for ($idUser = 2; $idUser < 10; $idUser++) {
+            $name = $faker->name;
+            DB::table('users')->insert([
+                'name' => $name,
+                'email' => $faker->email,
+                'password' => Hash::make("123456"),
+                'level' => 'user'
+            ]);
 
-        DB::table('gurus')->insert([
-            'id_user' => '2',
-            'nama' => 'Budi',
-            'unit' => 'Kenongo',
-            'tempat_lahir' => 'Mojokerto',
-            'tanggal_lahir' => '1995-12-11 10:59:52',
-            'no_hp' => '085159159159',
-            'gaji' => '4500000',
-            'tanggal_masuk' => '2022-10-21 15:39:12'
-        ]);
+            $units = ['Surodinawan', 'Kenongo', 'Magersari'];
+            $randomIndex = array_rand($units);
+            $unit = $units[$randomIndex];
+            $teacher = Guru::create([
+                'id_user' => $idUser,
+                'nama' => $name,
+                'unit' => $unit,
+                'tempat_lahir' => $faker->city,
+                'tanggal_lahir' => $faker->dateTimeBetween('-60 years', '-18 years')->format('Y-m-d'),
+                'no_hp' => $faker->phoneNumber,
+                'gaji' => 1000000,
+                'tanggal_masuk' => $faker->dateTimeThisYear()->format('Y-m-d')
+            ]);
 
-        DB::table('murids')->insert([
-            'id_guru' => '1',
-            'nama' => 'Ipin',
-            'unit' => 'Kenongo',
-            'tempat_lahir' => 'Mojokerto',
-            'tanggal_lahir' => '1995-12-11 10:59:52',
-            'umur' => '6',
-            'no_hp' => '085159159159',
-            'spp' => '4500000',
-            'tanggal_masuk' => '2022-10-21 15:39:12',
-            'alamat' => 'Jl. Gedangan'
-        ]);
+            for ($j = 0; $j < $faker->numberBetween(5, 10); $j++) {
+                $birthDate = $faker->dateTimeBetween('-20 years', '-7 years')->format('Y-m-d');
+                $currentDate = date('Y-m-d');
+                $age = date_diff(date_create($birthDate), date_create($currentDate))->y;
 
-        DB::table('murids')->insert([
-            'id_guru' => '1',
-            'nama' => 'Ehsan',
-            'unit' => 'Kenongo',
-            'tempat_lahir' => 'Sidoarjo',
-            'tanggal_lahir' => '1999-12-11 10:59:52',
-            'umur' => '6',
-            'no_hp' => '085159159159',
-            'spp' => '4500000',
-            'tanggal_masuk' => '2022-10-21 15:39:12',
-            'alamat' => 'Jl. Gedangan'
-        ]);
+                $student = Murid::create([
+                    'id_guru' => $teacher->id,
+                    'nama' => $faker->name,
+                    'unit' => $unit,
+                    'tempat_lahir' => $faker->city,
+                    'tanggal_lahir' => $birthDate,
+                    'umur' => $age,
+                    'no_hp' => $faker->phoneNumber,
+                    'spp' => 500000,
+                    'tanggal_masuk' => $faker->dateTimeThisYear()->format('Y-m-d'),
+                    'alamat' => $faker->city
+                ]);
 
-        DB::table('spps')->insert([
-            'id_teacher' => '1',
-            'id_student' => '1',
-            'unit' => 'Kenongo',
-            'nominal' => 0,
-            'created_at' => '2023-06-13 23:01:33'
-        ]);
+                Spp::create([
+                    'id_teacher' => $teacher->id,
+                    'id_student' => $student->id,
+                    'unit' => $unit,
+                    'nominal' => 500000,
+                    'created_at' =>  $faker->dateTimeThisYear()->format('Y-m-d')
+                ]);
+            }
 
-        DB::table('pengeluarans')->insert([
-            'unit' => 'Kenongo',
-            'kategori' => 'Gaji',
-            'nominal' => 10000000,
-            'keterangan' => 'Juni 2023',
-            'created_at' => '2023-06-13 23:01:33'
-        ]);
+            for ($k = 0; $k < $faker->numberBetween(1, 3); $k++) {
 
-        DB::table('pengeluarans')->insert([
-            'unit' => 'Kenongo',
-            'kategori' => 'Listrik',
-            'nominal' => 200000,
-            'created_at' => '2023-06-13 23:01:33'
-        ]);
+                $categories = ['Listrik', 'ATK', 'lain-lain'];
+                $randomArray = array_rand($categories);
+                $category = $categories[$randomArray];
+                if ($k === 0) {
+                    Pengeluaran::create([
+                        'unit' => $unit,
+                        'kategori' => 'Gaji',
+                        'nominal' => 1000000,
+                        'keterangan' => $faker->word(),
+                        'created_at' => $faker->dateTimeThisYear()->format('Y-m-d')
+                    ]);
+                } else{
+                    Pengeluaran::create([
+                        'unit' => $unit,
+                        'kategori' => $category,
+                        'nominal' => $faker->numberBetween(10, 100) * 1000,
+                        'keterangan' => $faker->word(),
+                        'created_at' => $faker->dateTimeThisYear()->format('Y-m-d')
+                    ]);
+                }
+            }
+        }
     }
 }

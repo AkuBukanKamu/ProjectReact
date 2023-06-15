@@ -96,7 +96,7 @@ function SPP() {
                     <tr>
                       <th>No</th>
                       <th>Unit</th>
-                      <th>Katetori</th>
+                      <th>No HP</th>
                       <th>Keterangan</th>
                       <th>Nominal</th>
                     </tr>
