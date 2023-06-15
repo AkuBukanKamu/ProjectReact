@@ -4,6 +4,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\GuruController;
 use App\Http\Controllers\MuridController;
+use App\Http\Controllers\PengeluaranController;
 use App\Http\Controllers\SppController;
 use App\Http\Controllers\UserController;
 
@@ -53,4 +54,12 @@ Route::middleware(['auth:api','userAccess:user'])->group(function () {
     Route::post('/payment', [SppController::class, 'create']);
     Route::get('/profile/teacher', [GuruController::class, 'profileTeacher']);
     Route::get('/profile/student/{id}', [MuridController::class, 'show']);
+});
+
+Route::middleware(['auth:api'])->group(function () {
+    Route::get('/user', [UserController::class, 'detail']);
+    Route::get('/expense', [PengeluaranController::class, 'index']);
+    Route::post('/expense', [PengeluaranController::class, 'store']);
+    Route::put('/expense/{id}', [PengeluaranController::class, 'update']);
+    Route::delete('/expense/{id}', [PengeluaranController::class, 'destroy']);
 });

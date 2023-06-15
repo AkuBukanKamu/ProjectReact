@@ -16,7 +16,7 @@ class UserSeeder extends Seeder
             'name'      => 'admin',
             'email'     => 'admin@gmail.com',
             'password'  => Hash::make('admin'),
-            'level'     =>'admin',
+            'level'     => 'admin',
         ]);
 
         DB::table('users')->insert([
@@ -67,10 +67,23 @@ class UserSeeder extends Seeder
             'id_teacher' => '1',
             'id_student' => '1',
             'unit' => 'Kenongo',
-            'nominal' => '100000',
-            'created_at' => '2023-06-13 23:01:33
-            '
+            'nominal' => 0,
+            'created_at' => '2023-06-13 23:01:33'
         ]);
 
+        DB::table('pengeluarans')->insert([
+            'unit' => 'Kenongo',
+            'kategori' => 'Gaji',
+            'nominal' => 10000000,
+            'keterangan' => 'Juni 2023',
+            'created_at' => '2023-06-13 23:01:33'
+        ]);
+
+        DB::table('pengeluarans')->insert([
+            'unit' => 'Kenongo',
+            'kategori' => 'Listrik',
+            'nominal' => 200000,
+            'created_at' => '2023-06-13 23:01:33'
+        ]);
     }
 }

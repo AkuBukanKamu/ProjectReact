@@ -95,10 +95,10 @@ function SPP() {
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>Nama</th>
-                      <th>No Hp</th>
-                      <th>SPP</th>
-                      <th>Aksi</th>
+                      <th>Unit</th>
+                      <th>Katetori</th>
+                      <th>Keterangan</th>
+                      <th>Nominal</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -108,19 +108,19 @@ function SPP() {
                         <td>{row.nama_siswa}</td>
                         <td>{row.no_hp}</td>
                         <td>
-                          {row.nominal === "0" ? "Belum Bayar" : row.nominal}
+                          {row.nominal === 0 ? "Belum Bayar" : row.nominal}
                         </td>
                         <td>
                           {" "}
                           <Button
-                            variant={row.nominal !== "0" ? "success" : "primary"}
+                            variant={row.nominal !== 0 ? "success" : "primary"}
                             onClick={() => {
                               setSelectedData(row);
                               setShow(true);
                             }}
-                            disabled={row.nominal !== "0"}
+                            disabled={row.nominal !== 0}
                           >
-                            {row.nominal !== "0" ? "Lunas" : "Bayar"}
+                            {row.nominal !== 0 ? "Lunas" : "Bayar"}
                           </Button>
                         </td>
                       </tr>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Guru;
 use App\Models\User;
+use Auth;
 use Illuminate\Http\Request;
 
 class UserController extends Controller
@@ -62,6 +63,14 @@ class UserController extends Controller
 
         return response()->json([
             'datauser' => $user
+        ]);
+    }
+    public function detail()
+    {
+        $user = Auth::user();
+
+        return response()->json([
+            'result' => $user
         ]);
     }
 
