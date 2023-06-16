@@ -5,6 +5,13 @@ export function convertDate(dateString) {
   return date.toLocaleDateString("id-ID", options);
 }
 
+export function convertPeriode(dateString) {
+  const date = new Date(dateString);
+  const options = { month: "long", year: "numeric" };
+
+  return date.toLocaleDateString("id-ID", options);
+}
+
 export function convertTime(dateString) {
   const date = new Date(dateString);
   const options = {
@@ -14,7 +21,7 @@ export function convertTime(dateString) {
     timeZoneName: "short",
   };
 
-  return date.toLocaleDateString("id-ID", options);
+  return date.toLocaleString("id-ID", options);
 }
 
 export function dateNow() {

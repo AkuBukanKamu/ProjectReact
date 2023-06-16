@@ -3,30 +3,52 @@ import Layout from "../../Components/Layout";
 import apiSpp from "../../lib/api/spp";
 import { Button, Form, Modal, Table } from "react-bootstrap";
 import Swal from "sweetalert2";
-import { dateNow, timeNow } from "../../lib/utils/dateFormatter";
+import {
+  Page,
+  Text,
+  View,
+  Document,
+  StyleSheet,
+  PDFDownloadLink,
+} from "@react-pdf/renderer";
+import {
+  convertDate,
+  convertPeriode,
+  dateNow,
+  timeNow,
+} from "../../lib/utils/dateFormatter";
 import { rupiahFormatter } from "../../lib/utils/currencyFormatter";
 
-const monthNames = [
-  "Januari",
-  "Februari",
-  "Maret",
-  "April",
-  "Mei",
-  "Juni",
-  "Juli",
-  "Agustus",
-  "September",
-  "Oktober",
-  "November",
-  "Desember",
-];
+const styles = StyleSheet.create({
+  page: {
+    fontFamily: "Helvetica",
+    fontSize: 12,
+    padding: 30,
+  },
+  title: {
+    fontSize: 24,
+    marginBottom: 30,
+  },
+  section: {
+    marginBottom: 10,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    marginBottom: 16,
+  },
+  label: {
+    width: "40%",
+  },
+  value: {
+    width: "60%",
+  },
+});
 
 function SPP() {
   const [data, setData] = useState();
   const [show, setShow] = useState(false);
   const currentDate = new Date();
-  const currentMonth = monthNames[currentDate.getMonth()];
-  const currentYear = currentDate.getFullYear();
   const [selectedData, setSelectedData] = useState();
   const [validationError, setValidationError] = useState({});
   const [nominal, setNominal] = useState();
@@ -69,14 +91,46 @@ function SPP() {
 
   const handleClose = () => setShow(false);
 
+  const MyDocument = ({ dataPDF }) => (
+    <Document>
+      <Page size="A4" style={styles.page}>
+        <Text style={styles.title}>Invoice</Text>
+        <View style={styles.section}>
+          <View style={styles.header}>
+            <Text style={styles.label}>Invoice No:</Text>
+            <Text style={styles.value}>{dataPDF?.id}</Text>
+          </View>
+          <View style={styles.header}>
+            <Text style={styles.label}>Tanggal Pembayaran:</Text>
+            <Text style={styles.value}>{convertDate(dataPDF?.created_at)}</Text>
+          </View>
+          <View style={styles.header}>
+            <Text style={styles.label}>Nama Siswa:</Text>
+            <Text style={styles.value}>{dataPDF?.nama_siswa}</Text>
+          </View>
+          <View style={styles.header}>
+            <Text style={styles.label}>Periode:</Text>
+            <Text style={styles.value}>
+              {convertPeriode(dataPDF?.created_at)}
+            </Text>
+          </View>
+          <View style={styles.header}>
+            <Text style={styles.label}>Biaya SPP:</Text>
+            <Text style={styles.value}>
+              {rupiahFormatter(dataPDF?.nominal)}
+            </Text>
+          </View>
+        </View>
+      </Page>
+    </Document>
+  );
+
   return (
     <Layout>
       <div class="content-wrapper">
         <div class="container-xxl flex-grow-1 container-p-y">
           <h3 class="fw-bold ">Pembayaran SPP</h3>
-          <div class="mb-4">
-            {currentMonth} {currentYear}
-          </div>
+          <div class="mb-4">{convertPeriode(currentDate)}</div>
           <div class="card">
             <div class="card-body">
               <div class="table-responsive text-nowrap">
@@ -97,20 +151,39 @@ function SPP() {
                         <td>{row.nama_siswa}</td>
                         <td>{row.no_hp}</td>
                         <td>
-                          {row.nominal === 0 ? "Belum Bayar" : rupiahFormatter(row.nominal)}
+                          {row.nominal === 0
+                            ? "Belum Bayar"
+                            : rupiahFormatter(row.nominal)}
                         </td>
                         <td>
-                          {" "}
-                          <Button
-                            variant={row.nominal !== 0 ? "success" : "primary"}
-                            onClick={() => {
-                              setSelectedData(row);
-                              setShow(true);
-                            }}
-                            disabled={row.nominal !== 0}
-                          >
-                            {row.nominal !== 0 ? "Lunas" : "Bayar"}
-                          </Button>
+                          {row.nominal !== 0 ? (
+                            <PDFDownloadLink
+                              document={<MyDocument dataPDF={row} />}
+                              fileName="invoice.pdf"
+                            >
+                              {({ blob, url, loading, error }) =>
+                                loading ? (
+                                  "Loading document..."
+                                ) : (
+                                  <Button variant="success">Download</Button>
+                                )
+                              }
+                            </PDFDownloadLink>
+                          ) : (
+                            <Button
+                              variant={
+                                row.nominal !== 0 ? "success" : "primary"
+                              }
+                              onClick={() => {
+                                setSelectedData(row);
+                                if (row.nominal === 0) {
+                                  setShow(true);
+                                }
+                              }}
+                            >
+                              Bayar{" "}
+                            </Button>
+                          )}
                         </td>
                       </tr>
                     ))}
@@ -152,9 +225,7 @@ function SPP() {
               </tr>
               <tr>
                 <td>Periode</td>
-                <th>
-                  {currentMonth} {currentYear}
-                </th>
+                <th>{convertPeriode(currentDate)}</th>
               </tr>
               <tr>
                 <td>Tanggal Pembayaran</td>
