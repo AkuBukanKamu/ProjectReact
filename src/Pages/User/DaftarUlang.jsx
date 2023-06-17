@@ -48,7 +48,7 @@ function DaftarUlang() {
 
   const handleSave = async (e) => {
     const body = {
-      unit: data.info.unit,
+      unit: data?.info?.unit,
       id_student: idStudent,
       nominal: 0,
     };

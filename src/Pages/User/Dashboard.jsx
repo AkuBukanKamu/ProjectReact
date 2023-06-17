@@ -54,7 +54,7 @@ function Dashboard() {
 
 
       const res1 = await apiTeacher.dashboard();
-      setUnit(res1.data.data.info.unit)
+      setUnit(res1?.data?.data?.info?.unit)
     };
 
     getData();
