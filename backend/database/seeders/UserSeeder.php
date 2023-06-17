@@ -63,7 +63,7 @@ class UserSeeder extends Seeder
                     'umur' => $age,
                     'no_hp' => $faker->phoneNumber,
                     'spp' => 500000,
-                    'tanggal_masuk' => $faker->dateTimeThisYear()->format('Y-m-d'),
+                    'tanggal_masuk' => $faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d'),
                     'alamat' => $faker->city
                 ]);
 
@@ -72,11 +72,11 @@ class UserSeeder extends Seeder
                     'id_student' => $student->id,
                     'unit' => $unit,
                     'nominal' => 500000,
-                    'created_at' =>  $faker->dateTimeThisYear()->format('Y-m-d')
+                    'created_at' =>  $faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d')
                 ]);
             }
 
-            for ($k = 0; $k < $faker->numberBetween(1, 3); $k++) {
+            for ($k = 0; $k < $faker->numberBetween(2, 5); $k++) {
 
                 $categories = ['Listrik', 'ATK', 'lain-lain'];
                 $randomArray = array_rand($categories);
@@ -87,7 +87,7 @@ class UserSeeder extends Seeder
                         'kategori' => 'Gaji',
                         'nominal' => 1000000,
                         'keterangan' => $faker->word(),
-                        'created_at' => $faker->dateTimeThisYear()->format('Y-m-d')
+                        'created_at' => $faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d')
                     ]);
                 } else{
                     Pengeluaran::create([
@@ -95,7 +95,7 @@ class UserSeeder extends Seeder
                         'kategori' => $category,
                         'nominal' => $faker->numberBetween(10, 100) * 1000,
                         'keterangan' => $faker->word(),
-                        'created_at' => $faker->dateTimeThisYear()->format('Y-m-d')
+                        'created_at' =>$faker->dateTimeBetween('-1 year', 'now')->format('Y-m-d')
                     ]);
                 }
             }

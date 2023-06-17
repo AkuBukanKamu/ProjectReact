@@ -141,7 +141,7 @@ function SPP() {
                       <th>Unit</th>
                       <th>No HP</th>
                       <th>Keterangan</th>
-                      <th>Nominal</th>
+                      <th>Aksi</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -153,7 +153,7 @@ function SPP() {
                         <td>
                           {row.nominal === 0
                             ? "Belum Bayar"
-                            : rupiahFormatter(row.nominal)}
+                            : 'Lunas'}
                         </td>
                         <td>
                           {row.nominal !== 0 ? (

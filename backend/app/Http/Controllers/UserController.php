@@ -33,13 +33,13 @@ class UserController extends BaseController
             ];
             $user = Auth::user();
             if ($user->level === "admin") {
-                $income = Spp::select(DB::raw('MONTHNAME(created_at) as month'), DB::raw('SUM(nominal) as nominal'))
-                    ->groupBy(DB::raw('MONTHNAME(created_at)'), DB::raw('YEAR(created_at)'))
+                $income = Spp::select(DB::raw("DATE_FORMAT(created_at, '%M %Y') AS month"), DB::raw('SUM(nominal) AS nominal'))
+                    ->groupBy(DB::raw('DATE_FORMAT(created_at, "%M %Y")'))
                     ->orderBy('created_at', 'asc')
                     ->get();
 
-                $expense = Pengeluaran::select(DB::raw('MONTHNAME(created_at) as month'), DB::raw('SUM(nominal) as nominal'))
-                    ->groupBy(DB::raw('MONTHNAME(created_at)'), DB::raw('YEAR(created_at)'))
+                $expense = Pengeluaran::select(DB::raw("DATE_FORMAT(created_at, '%M %Y') AS month"), DB::raw('SUM(nominal) AS nominal'))
+                    ->groupBy(DB::raw('DATE_FORMAT(created_at, "%M %Y")'))
                     ->orderBy('created_at', 'asc')
                     ->get();
             } else {

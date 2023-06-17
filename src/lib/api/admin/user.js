@@ -8,8 +8,19 @@ const deleted = (id) => instance.auth.delete(`/user/${id}`);
 const user = (id) => instance.auth.get("/user");
 const chart = () => instance.auth.get(`/chart`);
 
-const income = () => instance.auth.get(`/income`);
+const monthOptions = () => instance.auth.get(`/monthOptions`);
+const income = (data) => instance.auth.get(`/income?month=${data}`);
 
-const apiUser = { index, view, store, update, deleted, user, income, chart };
+const apiUser = {
+  index,
+  view,
+  store,
+  update,
+  deleted,
+  user,
+  income,
+  chart,
+  monthOptions,
+};
 
 export default apiUser;

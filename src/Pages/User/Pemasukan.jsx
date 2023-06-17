@@ -3,16 +3,31 @@ import Layout from "../../Components/Layout";
 import apiUser from "../../lib/api/admin/user";
 import { convertDate } from "../../lib/utils/dateFormatter";
 import { excelDownloader } from "../../lib/utils/excelDownloader";
-import { Button } from "react-bootstrap";
+import { Button, Dropdown } from "react-bootstrap";
 import { rupiahFormatter } from "../../lib/utils/currencyFormatter";
 
 function Pemasukan() {
   const [data, setData] = useState();
+  const [selectedOption, setSelectedOption] = useState("Filter");
+  const [monthsOptions, setMonthOptions] = useState([]);
+
+  const handleSelect = (eventKey) => {
+    setSelectedOption(eventKey);
+  };
 
   useEffect(() => {
     const getData = async () => {
-      const res = await apiUser.income();
+      const res = await apiUser.income(selectedOption === "Filter" ? "" : selectedOption);
       setData(res.data.data);
+    };
+
+    getData();
+  }, [selectedOption]);
+
+  useEffect(() => {
+    const getData = async () => {
+      const { data } = await apiUser.monthOptions();
+      setMonthOptions(data.data);
     };
 
     getData();
@@ -28,7 +43,7 @@ function Pemasukan() {
         Tanggal: convertDate(v.created_at),
       };
     });
-    
+
     excelDownloader(rows, "Pemasukan.xlsx");
   };
 
@@ -39,9 +54,25 @@ function Pemasukan() {
           <h3 class="fw-bold ">Pemasukan</h3>
           <div class="card">
             <div class="card-body">
-              <Button variant="success" onClick={handleDownload}>
-                Export
-              </Button>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <Dropdown onSelect={handleSelect}>
+                  <Dropdown.Toggle variant="primary" id="dropdown-select">
+                    {selectedOption}
+                  </Dropdown.Toggle>
+                  <Dropdown.Menu>
+                    {monthsOptions.map((v) => (
+                      <Dropdown.Item eventKey={v.month_year}>
+                        {v.month_year}
+                      </Dropdown.Item>
+                    ))}{" "}
+                    <Dropdown.Item eventKey="Filter">Semua</Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+                <Button variant="success" onClick={handleDownload}>
+                  Export
+                </Button>
+              </div>
+
               <div
                 class="table-responsive text-nowrap"
                 style={{ marginTop: 12 }}

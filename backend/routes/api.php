@@ -47,6 +47,7 @@ Route::middleware(['auth:api','userAccess:admin'])->group(function () {
     Route::delete('/student/{id}', [MuridController::class, 'destroy']);
 
     Route::get('/income', [SppController::class, 'index']);
+    Route::get('/monthOptions', [SppController::class, 'month']);
 });
 
 Route::middleware(['auth:api','userAccess:user'])->group(function () {

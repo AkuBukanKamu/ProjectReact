@@ -5,23 +5,34 @@ namespace App\Http\Controllers;
 use App\Models\Guru;
 use App\Models\Spp;
 use Auth;
+use Carbon\Carbon;
 use Date;
+use DB;
 use Illuminate\Http\Request;
 
 class SppController extends BaseController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
+
+    public function index(Request $request)
     {
         try {
-            $data = Spp::where("nominal", "<>", "0")
-            ->join("murids", "spps.id_student", "=", "murids.id")
-            ->select("spps.*", "murids.nama as nama_siswa")
-            ->orderBy('created_at', 'desc')->get();
+            $monthYear = $request->get('month');
+            if ($monthYear) {
+                $cleanMonthYear = str_replace('"', '', $monthYear);
+                $startDate = Carbon::createFromFormat('F Y', $cleanMonthYear)->startOfMonth();
+                $endDate = Carbon::createFromFormat('F Y', $cleanMonthYear)->endOfMonth();
+                $data = Spp::whereBetween('spps.created_at', [$startDate, $endDate])
+                    ->where("nominal", "<>", "0")
+                    ->join("murids", "spps.id_student", "=", "murids.id")
+                    ->select("spps.*", "murids.nama as nama_siswa")
+                    ->orderBy('created_at', 'desc')->get();
+            } else {
+                $data = Spp::where("nominal", "<>", "0")
+                    ->join("murids", "spps.id_student", "=", "murids.id")
+                    ->select("spps.*", "murids.nama as nama_siswa")
+                    ->orderBy('created_at', 'desc')->get();
+            }
+
 
             return $this->sendResponse($data, "data retrieved successfully");
         } catch (\Throwable $th) {
@@ -29,11 +40,6 @@ class SppController extends BaseController
         }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
         try {
@@ -78,6 +84,19 @@ class SppController extends BaseController
 
 
             return $this->sendResponse($students, "data retrieved successfully");
+        } catch (\Throwable $th) {
+            return $this->sendError("error retrieving data", $th->getMessage());
+        }
+    }
+
+    public function month(Request $request)
+    {
+        try {
+            $months = Spp::select(DB::raw("DISTINCT DATE_FORMAT(created_at, '%M %Y') as month_year"))
+                ->orderByRaw("DATE_FORMAT(created_at, '%Y-%m') DESC")
+                ->get();
+
+            return $this->sendResponse($months, "data retrieved successfully");
         } catch (\Throwable $th) {
             return $this->sendError("error retrieving data", $th->getMessage());
         }
