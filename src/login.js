@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import { useHistory } from "react-router";
 import axios from "axios";
-import { error } from "jquery";
+import baseUrl from "./config"
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -27,8 +26,7 @@ function Login() {
     formData.append("password", password);
 
     await axios
-    // .post(`http://127.0.0.1:8000/api/login`, formData)
-      .post(`https://project-9999.000webhostapp.com/api/login`, formData)
+      .post(`${baseUrl}/api/login`, formData)
       .then((response) => {
         localStorage.setItem("token", response.data.token);
         localStorage.setItem("role", response.data.datauser.level);
